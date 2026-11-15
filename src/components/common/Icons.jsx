@@ -77,3 +77,14 @@ export function FileIcon() {
     </svg>
   );
 }
+
+// 검색 결과 없음 (돋보기 안에 X)
+export function NoResultIcon() {
+  return (
+    <svg viewBox="0 0 48 48" {...line}>
+      <circle cx="20" cy="20" r="14" strokeWidth="5" />
+      <line x1="31" y1="31" x2="42" y2="42" strokeWidth="7" />
+      <path d="M15 15l10 10M25 15l-10 10" strokeWidth="2" />
+    </svg>
+  );
+}

@@ -63,8 +63,9 @@
 }
 
 @media (min-width: 1025px) {
+  /* 배너(308px) 위쪽에서 104px 내려온 위치에 사진이 걸치도록: 308 - 104 = 204 */
   .profile {
-    margin-top: 62px;
+    margin-top: -204px;
   }
 
   .photo {
@@ -73,7 +74,7 @@
   }
 
   .contacts {
-    margin-top: 50px;
+    margin-top: 62px;
   }
 }
 
