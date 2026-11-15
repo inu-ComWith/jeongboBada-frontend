@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import { AvatarIcon, PhoneIcon, PinIcon } from "../common/Icons";
+import styles from "./ProfessorCard.module.css";
 
 // 검색어와 일치하는 부분을 굵게 표시
 function Highlight({ text, keyword }) {
@@ -20,8 +21,8 @@ function ProfessorCard({ professor, keyword }) {
   const { id, name, office, phone, photo } = professor;
 
   return (
-    <Link className="professor-card" to={`/professor/${encodeURIComponent(id)}`}>
-      <div className="professor-card__photo">
+    <Link className={styles.card} to={`/professor/${encodeURIComponent(id)}`}>
+      <div className={styles.photo}>
         {/* lazy: 화면에 보일 때만 사진을 불러옴 */}
         {photo ? (
           <img src={photo} alt={`${name} 교수님 사진`} loading="lazy" decoding="async" />
@@ -29,15 +30,15 @@ function ProfessorCard({ professor, keyword }) {
           <AvatarIcon />
         )}
       </div>
-      <div className="professor-card__info">
-        <h2 className="professor-card__name">
+      <div className={styles.info}>
+        <h2 className={styles.name}>
           <Highlight text={name} keyword={keyword} />
         </h2>
-        <p className="professor-card__meta">
+        <p className={styles.meta}>
           <PinIcon strokeWidth={2} />
           <span>{office}</span>
         </p>
-        <p className="professor-card__meta">
+        <p className={styles.meta}>
           <PhoneIcon strokeWidth={2} />
           <span>{phone}</span>
         </p>

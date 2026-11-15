@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchProfessors, getCachedProfessors } from "../api/professors";
-import useFetch from "../hooks/useFetch";
-import ProfessorCard from "../components/professor-list/ProfessorCard";
-import { SearchIcon } from "../components/common/Icons";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import "./professor-common.css";
-import "./ProfessorList.css";
+import { fetchProfessors, getCachedProfessors } from "../../api/professors";
+import useFetch from "../../hooks/useFetch";
+import ProfessorCard from "../../components/professor-list/ProfessorCard";
+import { SearchIcon } from "../../components/common/Icons";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import page from "./ProfessorPage.module.css";
+import styles from "./ProfessorList.module.css";
 
 const MESSAGES = {
   loading: "교수님 정보를 불러오는 중입니다...",
@@ -51,30 +51,30 @@ export default function ProfessorList() {
   return (
     <>
       <Header />
-      <main className="professor-page">
-        <section className="hero">
-          <div className="container">
-            <h1 className="hero__title">교수님 정보</h1>
-            <form className="search" role="search" onSubmit={handleSubmit}>
+      <main className={page.page}>
+        <section className={styles.hero}>
+          <div className={page.container}>
+            <h1 className={styles.heroTitle}>교수님 정보</h1>
+            <form className={styles.search} role="search" onSubmit={handleSubmit}>
               <input
                 type="text"
-                className="search__input"
+                className={styles.searchInput}
                 aria-label="교수님 이름 검색"
                 autoComplete="off"
                 value={input}
                 onChange={handleChange}
               />
-              <button type="submit" className="search__btn" aria-label="검색">
+              <button type="submit" className={styles.searchButton} aria-label="검색">
                 <SearchIcon />
               </button>
             </form>
           </div>
         </section>
 
-        <section className="list">
-          <div className="container">
+        <section className={styles.list}>
+          <div className={page.container}>
             {filtered.length > 0 && (
-              <ul className="professor-grid">
+              <ul className={styles.grid}>
                 {filtered.map((p) => (
                   <li key={p.id}>
                     <ProfessorCard professor={p} keyword={keyword} />
@@ -82,7 +82,7 @@ export default function ProfessorList() {
                 ))}
               </ul>
             )}
-            {message && <p className="empty">{message}</p>}
+            {message && <p className={page.empty}>{message}</p>}
           </div>
         </section>
       </main>

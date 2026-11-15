@@ -1,20 +1,21 @@
-.info-section {
+.section {
   display: grid;
   grid-template-columns: 42px 1fr;
   column-gap: 20px;
   align-items: center;
 }
 
-.info-section + .info-section {
+.section + .section {
   margin-top: 110px;
 }
 
-.icon-circle--dark {
+/* 원형 아이콘 변형 (기본 모양은 IconCircle.module.css) */
+.iconDark {
   background: #999;
   color: #333;
 }
 
-.icon-circle--button {
+.iconButton {
   padding: 0;
   border: none;
   font: inherit;
@@ -22,30 +23,30 @@
   transition: background 0.15s;
 }
 
-.icon-circle--button:hover {
+.iconButton:hover {
   background: #888;
 }
 
-.icon-circle--button:disabled {
+.iconButton:disabled {
   cursor: default;
   opacity: 0.5;
 }
 
-.info-section__head {
+.head {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
 }
 
-.info-section__title {
+.title {
   font-size: 22px;
   font-weight: 700;
   color: #1a2346;
   margin-right: 12px;
 }
 
-.info-section__title-btn {
+.titleButton {
   padding: 0;
   border: none;
   background: none;
@@ -55,23 +56,15 @@
   cursor: pointer;
 }
 
-.info-section__title-btn:hover:not(:disabled) {
+.titleButton:hover:not(:disabled) {
   text-decoration: underline;
 }
 
-.info-section__title-btn:disabled {
+.titleButton:disabled {
   cursor: default;
 }
 
-.tag {
-  padding: 4px 10px;
-  background: #a8a8a8;
-  font-size: 14px;
-  font-weight: 700;
-  color: #111;
-}
-
-.info-section__text {
+.text {
   grid-column: 2;
   margin-top: 10px;
   font-size: 14px;
@@ -81,28 +74,23 @@
 }
 
 @media (min-width: 1025px) {
-  .info-section + .info-section {
+  .section + .section {
     margin-top: 130px;
   }
 }
 
 @media (max-width: 720px) {
-  .info-section {
+  .section {
     grid-template-columns: 36px 1fr;
     column-gap: 12px;
   }
 
-  .info-section + .info-section {
+  .section + .section {
     margin-top: 48px;
   }
 
-  .info-section__title {
+  .title {
     font-size: 19px;
     margin-right: 4px;
-  }
-
-  .tag {
-    font-size: 12px;
-    padding: 3px 8px;
   }
 }

@@ -5,7 +5,7 @@
   margin-top: -170px; /* 사진을 배너 위로 걸치게 */
 }
 
-.profile__photo {
+.photo {
   width: 220px;
   height: 245px;
   background: #b8b8b8;
@@ -16,18 +16,18 @@
 }
 
 /* 사진이 없을 때 보이는 기본 아이콘 */
-.profile__photo svg {
+.photo svg {
   width: 45%;
   height: auto;
 }
 
-.profile__photo img {
+.photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.profile__contacts {
+.contacts {
   margin-top: 46px;
 }
 
@@ -43,12 +43,12 @@
   margin-top: 20px;
 }
 
-.contact--strong {
+.strong {
   font-weight: 600;
   color: #111;
 }
 
-.contact__text {
+.text {
   min-width: 0;
   overflow-wrap: anywhere;
 }
@@ -67,12 +67,12 @@
     margin-top: 62px;
   }
 
-  .profile__photo {
+  .photo {
     width: 246px;
     height: 273px;
   }
 
-  .profile__contacts {
+  .contacts {
     margin-top: 50px;
   }
 }
@@ -83,12 +83,12 @@
     margin-top: -100px;
   }
 
-  .profile__photo {
+  .photo {
     width: 150px;
     height: 167px;
   }
 
-  .profile__contacts {
+  .contacts {
     margin-top: 28px;
   }
 

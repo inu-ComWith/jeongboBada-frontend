@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchProfessor, getCachedProfessor } from "../api/professors";
-import useFetch from "../hooks/useFetch";
-import { FileIcon, LinkIcon, UserIcon } from "../components/common/Icons";
-import LabLinkModal from "../components/professor-detail/LabLinkModal";
-import ProfileSidebar from "../components/professor-detail/ProfileSidebar";
-import InfoSection from "../components/professor-detail/InfoSection";
-import CourseTable from "../components/professor-detail/CourseTable";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import "./professor-common.css";
-import "./ProfessorDetail.css";
+import { fetchProfessor, getCachedProfessor } from "../../api/professors";
+import useFetch from "../../hooks/useFetch";
+import { FileIcon, LinkIcon, UserIcon } from "../../components/common/Icons";
+import LabLinkModal from "../../components/professor-detail/LabLinkModal";
+import ProfileSidebar from "../../components/professor-detail/ProfileSidebar";
+import InfoSection from "../../components/professor-detail/InfoSection";
+import CourseTable from "../../components/professor-detail/CourseTable";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+// ProfessorPage(공통) 다음에 ProfessorDetail을 불러와야 .container 덮어쓰기가 적용됨
+import page from "./ProfessorPage.module.css";
+import styles from "./ProfessorDetail.module.css";
 
 export default function ProfessorDetail() {
   const { id } = useParams();
@@ -34,20 +35,18 @@ export default function ProfessorDetail() {
   return (
     <>
       <Header />
-      <main className="detail professor-page">
-        <div className="detail__banner" />
-        <div className="container">
-          {status === "loading" && <p className="empty">교수님 정보를 불러오는 중입니다...</p>}
-          {status === "error" && <p className="empty">교수님 정보를 불러오지 못했습니다.</p>}
+      <main className={page.page}>
+        <div className={styles.banner} />
+        <div className={`${page.container} ${styles.container}`}>
+          {status === "loading" && <p className={page.empty}>교수님 정보를 불러오는 중입니다...</p>}
+          {status === "error" && <p className={page.empty}>교수님 정보를 불러오지 못했습니다.</p>}
 
           {status === "done" && (
-            <div className="detail__body">
+            <div className={styles.body}>
               <ProfileSidebar professor={professor} />
 
-              <div className="detail__content">
-                <InfoSection icon={<UserIcon />} title="교수 소개">
-                  <p className="info-section__text">{professor.intro}</p>
-                </InfoSection>
+              <div className={styles.content}>
+                <InfoSection icon={<UserIcon />} title="교수 소개" text={professor.intro} />
 
                 <InfoSection
                   icon={<LinkIcon />}
@@ -56,13 +55,12 @@ export default function ProfessorDetail() {
                   onAction={professor.labUrl ? () => setIsLabModalOpen(true) : undefined}
                   title={professor.lab}
                   extra={professor.fields.map((f, i) => (
-                    <span className="tag" key={`${f}-${i}`}>
+                    <span className={styles.tag} key={`${f}-${i}`}>
                       {f}
                     </span>
                   ))}
-                >
-                  <p className="info-section__text">{professor.labIntro}</p>
-                </InfoSection>
+                  text={professor.labIntro}
+                />
 
                 <InfoSection icon={<FileIcon />} title="담당과목">
                   <CourseTable courses={professor.courses} />

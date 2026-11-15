@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import "./LabLinkModal.css";
+import styles from "./LabLinkModal.module.css";
 
 // 연구실 홈페이지로 이동할지 묻는 팝업
 export default function LabLinkModal({ url, onClose }) {
@@ -49,31 +49,41 @@ export default function LabLinkModal({ url, onClose }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className={styles.overlay} onClick={onClose}>
       <div
-        className="modal"
+        className={styles.modal}
         ref={modalRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="lab-modal-title"
         onClick={(e) => e.stopPropagation()}
       >
-        <button type="button" className="modal__close" aria-label="닫기" onClick={onClose}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+        <button type="button" className={styles.close} aria-label="닫기" onClick={onClose}>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          >
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
         </button>
 
-        <h2 className="modal__title" id="lab-modal-title">
+        <h2 className={styles.title} id="lab-modal-title">
           연구실 홈페이지로 이동할까요?
         </h2>
-        <p className="modal__desc">홈페이지로 이동해도 로그인 상태는 유지됩니다</p>
+        <p className={styles.desc}>홈페이지로 이동해도 로그인 상태는 유지됩니다</p>
 
-        <div className="modal__actions">
-          <button type="button" className="modal__btn" ref={cancelRef} onClick={onClose}>
+        <div className={styles.actions}>
+          <button type="button" className={styles.button} ref={cancelRef} onClick={onClose}>
             취소
           </button>
-          <button type="button" className="modal__btn modal__btn--primary" onClick={handleMove}>
+          <button
+            type="button"
+            className={`${styles.button} ${styles.primary}`}
+            onClick={handleMove}
+          >
             이동하기
           </button>
         </div>

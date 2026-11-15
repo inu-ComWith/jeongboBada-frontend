@@ -3,78 +3,65 @@
    데스크탑(1025px 이상): 얇은 회색 띠 아래에 사진이 오는 형태 (시안 Desktop-2)
    각 영역 스타일은 components/professor-detail 폴더의 CSS 참고 */
 
-.detail__banner {
+.banner {
   height: 240px;
   background: #d9d9d9;
 }
 
-.detail__body {
+.body {
   display: grid;
   grid-template-columns: 300px 1fr;
   column-gap: 48px;
 }
 
-.detail__content {
+.content {
   padding-top: 56px;
   min-width: 0;
 }
 
-/* 원형 아이콘 (왼쪽 연락처, 오른쪽 섹션 공통) */
-.icon-circle {
-  flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #d9d9d9;
-  color: #222;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-circle svg {
-  width: 24px;
-  height: 24px;
+/* 연구 분야 태그 */
+.tag {
+  padding: 4px 10px;
+  background: #a8a8a8;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
 }
 
 @media (min-width: 1025px) {
-  .detail .container {
+  /* 공통 .container보다 조금 좁게 (ProfessorPage.module.css 다음에 불러와서 덮어씀) */
+  .container {
     max-width: 1068px;
   }
 
-  .detail__banner {
+  .banner {
     height: 43px;
   }
 
-  .detail__body {
+  .body {
     grid-template-columns: 360px 1fr;
   }
 
-  .detail__content {
+  .content {
     padding-top: 68px;
   }
 }
 
 @media (max-width: 720px) {
-  .detail__banner {
+  .banner {
     height: 160px;
   }
 
-  .detail__body {
+  .body {
     grid-template-columns: 1fr;
   }
 
-  .detail__content {
+  .content {
     padding-top: 48px;
   }
 
-  .icon-circle {
-    width: 36px;
-    height: 36px;
-  }
-
-  .icon-circle svg {
-    width: 20px;
-    height: 20px;
+  .tag {
+    font-size: 12px;
+    padding: 3px 8px;
   }
 }

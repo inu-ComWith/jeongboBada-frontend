@@ -5,8 +5,8 @@ import About from "../pages/dashboard/About";
 import Signup from "../pages/auth/Signup";
 import Login from "../pages/auth/Login";
 import FindPw from "../pages/auth/FindPw";
-import ProfessorList from "../pages/ProfessorList";
-import ProfessorDetail from "../pages/ProfessorDetail";
+import ProfessorList from "../pages/professor/ProfessorList";
+import ProfessorDetail from "../pages/professor/ProfessorDetail";
 
 function Router() {
   return (
