@@ -1,95 +1,445 @@
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, AlertTriangle } from "lucide-react";
+
 import { login } from "../../api/auth";
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+
 import styles from "./Login.module.css";
 import logoImg from "../../assets/logo.png";
 
+const MAX_ATTEMPTS = 5;
+
 function Login() {
+  /****************************** 테스트 ******************************/
+  /* const [testMode, setTestMode] = useState(import.meta.env.DEV); */
+  /* const [testAttempts, setTestAttempts] = useState(0);           */
+  /******************************************************************/
+
+  const navigate = useNavigate();
+
   const [studentId, setStudentId] = useState("");
   const [password, setPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  // 입력 필드 오류
+  const [errors, setErrors] = useState({});
+
+  // 상단 오류 배너
+  const [notice, setNotice] = useState(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 로그인 제한 종료 시각
+  const [lockUntil, setLockUntil] = useState(null);
+
+  // 카운트다운
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    if (!lockUntil) return;
+
+    const timer = setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [lockUntil]);
+
+  const remainingSeconds = lockUntil
+    ? Math.max(0, Math.ceil((lockUntil - now) / 1000))
+    : 0;
+
+  const isLocked = remainingSeconds > 0;
+
+  const countdown = `${String(Math.floor(remainingSeconds / 60)).padStart(
+    2,
+    "0",
+  )}:${String(remainingSeconds % 60).padStart(2, "0")}`;
+
+  const handleStudentIdChange = (e) => {
+    const onlyNumbers = e.target.value.replace(/[^0-9]/g, "");
+
+    setStudentId(onlyNumbers.slice(0, 9));
+
+    setErrors((prev) => ({
+      ...prev,
+      studentId: "",
+    }));
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+
+    setErrors((prev) => ({
+      ...prev,
+      password: "",
+    }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!studentId.trim()) {
+      newErrors.studentId = "학번을 입력해주세요";
+    } else if (!/^\d{9}$/.test(studentId)) {
+      newErrors.studentId = "학번은 숫자 9자리로 입력해주세요";
+    }
+
+    if (!password) {
+      newErrors.password = "비밀번호를 입력해주세요";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleValidationErrors = (serverErrors) => {
+    const newErrors = {};
+
+    serverErrors.forEach(({ field, message }) => {
+      if (field === "studentId") {
+        newErrors.studentId = message;
+      }
+
+      if (field === "password") {
+        newErrors.password = message;
+      }
+    });
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length > 0;
+  };
+
+  const handleLoginError = (error) => {
+    const status = error.response?.status;
+    const data = error.response?.data;
+
+    const code = data?.code;
+    const message = data?.message;
+
+    if (!error.response) {
+      setNotice({
+        type: "error",
+        message: "서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.",
+      });
+      return;
+    }
+
+    if (status === 400) {
+      const hasFieldErrors =
+        Array.isArray(data?.errors) && handleValidationErrors(data.errors);
+
+      if (!hasFieldErrors) {
+        setNotice({
+          type: "error",
+          message: message || "입력값을 확인해주세요.",
+        });
+      }
+
+      return;
+    }
+
+    // 미가입 학번: 실제 서버 코드 확인 필요
+    if (code === "USER_NOT_FOUND" || code === "ACCOUNT_NOT_FOUND") {
+      setErrors({
+        studentId: "가입되지 않은 학번입니다",
+      });
+
+      setNotice({
+        type: "unregistered",
+        message: "가입되지 않은 학번이에요. 회원가입 후 이용해주세요.",
+      });
+
+      return;
+    }
+
+    // 로그인 제한: 서버에서 제한 시간 제공 시 처리
+    if (status === 429 || code === "ACCOUNT_LOCKED") {
+      const retryAfter = Number(
+        data?.data?.remainingSeconds ?? data?.remainingSeconds,
+      );
+
+      const seconds =
+        Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : 0;
+
+      if (seconds > 0) {
+        setLockUntil(Date.now() + seconds * 1000);
+        setNow(Date.now());
+      }
+
+      setNotice({
+        type: "locked",
+        message:
+          message ||
+          "로그인 시도 횟수를 초과했습니다. 잠시 후 다시 시도해주세요.",
+      });
+
+      return;
+    }
+
+    if (status === 401) {
+      const failedAttempts = Number(
+        data?.data?.failedAttempts ?? data?.failedAttempts,
+      );
+
+      const hasAttempts =
+        Number.isInteger(failedAttempts) && failedAttempts >= 0;
+
+      setErrors({
+        password: "학번 또는 비밀번호가 일치하지 않습니다",
+      });
+
+      setNotice({
+        type: "mismatch",
+        attempts: hasAttempts ? failedAttempts : null,
+        message: message || "학번 또는 비밀번호가 일치하지 않아요.",
+      });
+
+      return;
+    }
+
+    if (status >= 500) {
+      setNotice({
+        type: "error",
+        message: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+      });
+
+      return;
+    }
+
+    setNotice({
+      type: "error",
+      message: message || "로그인에 실패했습니다.",
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!studentId || !password) {
-      alert("학번과 비밀번호를 입력해주세요.");
-      return;
-    }
+    if (isLoading || isLocked) return;
+
+    setNotice(null);
+    setErrors({});
+
+    if (!validate()) return;
+
+    setIsLoading(true);
+
+    /*************************** 테스트 ***************************/
+    // if (import.meta.env.DEV && testMode) {
+    //   const nextAttempts = testAttempts + 1;
+
+    //   setTestAttempts(nextAttempts);
+
+    //   if (nextAttempts >= 5) {
+    //     const until = Date.now() + 10 * 60 * 1000;
+
+    //     setLockUntil(until);
+    //     setNow(Date.now());
+
+    //     setNotice({
+    //       type: "locked",
+    //       message: "로그인 5회 실패로 10분 동안 로그인이 제한돼요.",
+    //     });
+    //   } else {
+    //     setErrors({
+    //       password: "학번 또는 비밀번호가 일치하지 않습니다",
+    //     });
+
+    //     setNotice({
+    //       type: "mismatch",
+    //       attempts: nextAttempts,
+    //       message: "학번 또는 비밀번호가 일치하지 않아요.",
+    //     });
+    //   }
+
+    //   setIsLoading(false);
+    //   return;
+    // }
+    /************************************************************************/
 
     try {
-      const response = await login({
+      const result = await login({
         studentId,
         password,
       });
 
-      const { accessToken, refreshToken } = response.data;
+      if (!result.success || !result.data?.accessToken) {
+        throw new Error("INVALID_LOGIN_RESPONSE");
+      }
+
+      const { accessToken, refreshToken } = result.data;
 
       localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
 
-      navigate("/");
+      if (refreshToken) {
+        localStorage.setItem("refreshToken", refreshToken);
+      }
+
+      // 로그인 성공 후 홈으로 이동
+      navigate("/", { replace: true });
     } catch (error) {
       console.error("로그인 실패:", error);
 
-      const message =
-        error.response?.data?.message || "로그인에 실패하였습니다.";
-
-      alert(message);
+      if (error.message === "INVALID_LOGIN_RESPONSE") {
+        setNotice({
+          type: "error",
+          message: "로그인 응답을 처리할 수 없습니다.",
+        });
+      } else {
+        handleLoginError(error);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className={styles.page}>
       <Header />
+
       <main className={styles.loginMain}>
-        <img src={logoImg} className={styles.profileImage} />
-        <form className={styles.loginForm} onSubmit={handleSubmit}>
-          <div className={styles.inputRow}>
-            <label>학번</label>
-            <input
-              id="studentId"
-              type="text"
-              maxLength={9}
-              value={studentId}
-              onChange={(e) => {
-                const onlyNumbers = e.target.value.replace(/[^0-9]/g, "");
-                setStudentId(onlyNumbers);
-              }}
-              placeholder="ex. 202701234"
-            />
-          </div>
+        <section className={styles.loginSection}>
+          <img
+            src={logoImg}
+            alt="정보바다 로고"
+            className={styles.profileImage}
+          />
 
-          <div className={styles.inputRow}>
-            <label>비밀번호</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="영문 숫자 각 1개 이상 포함"
-            />
-          </div>
+          {/* 로그인 오류 배너 */}
+          {notice && (
+            <div className={styles.notice} role="alert">
+              <AlertTriangle size={18} />
 
-          <div className={styles.loginActions}>
-            <button type="submit" className={styles.loginButton}>
-              로그인
-            </button>
+              <div>
+                {notice.type === "mismatch" ? (
+                  <>
+                    {notice.message}
+                    {notice.attempts !== null &&
+                      ` (${notice.attempts}/${MAX_ATTEMPTS}회)`}
 
-            <div className={styles.helpActions}>
-              <Link to="/find-password" className={styles.findPassword}>
-                계정을 잃어버렸어요
-              </Link>
-
-              <Link to="/signup" className={styles.signupLink}>
-                아직 계정이 없으신가요?
-              </Link>
+                    {notice.attempts !== null && (
+                      <>
+                        <br />
+                        5회 틀리면 10분 동안 로그인이 제한돼요.
+                      </>
+                    )}
+                  </>
+                ) : notice.type === "locked" ? (
+                  <>
+                    {notice.message}
+                    <br />
+                    비밀번호가 기억나지 않으면 비밀번호 찾기를 이용해주세요.
+                  </>
+                ) : (
+                  notice.message
+                )}
+              </div>
             </div>
-          </div>
-        </form>
+          )}
+
+          <form className={styles.loginForm} onSubmit={handleSubmit} noValidate>
+            <div className={styles.inputRow}>
+              <label htmlFor="studentId">학번</label>
+
+              <div className={styles.inputGroup}>
+                <input
+                  id="studentId"
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={9}
+                  value={studentId}
+                  onChange={handleStudentIdChange}
+                  placeholder="ex. 202301589"
+                  autoComplete="username"
+                  aria-invalid={Boolean(errors.studentId)}
+                  className={errors.studentId ? styles.inputError : ""}
+                />
+
+                {errors.studentId && (
+                  <span className={styles.errorText}>{errors.studentId}</span>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.inputRow}>
+              <label htmlFor="password">비밀번호</label>
+
+              <div className={styles.inputGroup}>
+                <div className={styles.passwordField}>
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={handlePasswordChange}
+                    placeholder="ex. 영문·숫자 각 1자 이상 포함"
+                    autoComplete="current-password"
+                    aria-invalid={Boolean(errors.password)}
+                    className={errors.password ? styles.inputError : ""}
+                  />
+
+                  <button
+                    type="button"
+                    className={styles.visibilityButton}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    aria-label={
+                      showPassword ? "비밀번호 숨기기" : "비밀번호 표시"
+                    }
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+
+                {errors.password && (
+                  <span className={styles.errorText}>{errors.password}</span>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.loginActions}>
+              <button
+                type="submit"
+                className={styles.loginButton}
+                disabled={isLoading || isLocked}
+              >
+                {isLocked
+                  ? `${countdown} 후 다시 시도할 수 있어요`
+                  : isLoading
+                    ? "로그인 중..."
+                    : "로그인"}
+              </button>
+
+              {notice?.type === "locked" ? (
+                <Link to="/find-password" className={styles.secondaryButton}>
+                  비밀번호 찾기
+                </Link>
+              ) : notice?.type === "unregistered" ? (
+                // 미가입 학번
+                <Link to="/signup" className={styles.secondaryButton}>
+                  회원가입 하러 가기
+                </Link>
+              ) : (
+                // 기본 링크
+                <div className={styles.helpActions}>
+                  <Link to="/find-password">계정을 잃어버렸어요</Link>
+
+                  <span className={styles.separator} />
+
+                  <Link to="/signup">아직 계정이 없으신가요?</Link>
+                </div>
+              )}
+            </div>
+          </form>
+        </section>
       </main>
+
+      <Footer />
     </div>
   );
 }
