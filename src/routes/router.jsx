@@ -5,6 +5,8 @@ import About from "../pages/dashboard/About";
 import Signup from "../pages/auth/Signup";
 import Login from "../pages/auth/Login";
 import FindPw from "../pages/auth/FindPw";
+import ProfessorList from "../pages/professor/ProfessorList";
+import ProfessorDetail from "../pages/professor/ProfessorDetail";
 
 function Router() {
   return (
@@ -14,6 +16,8 @@ function Router() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/find-password" element={<FindPw />} />
+      <Route path="/professor/list" element={<ProfessorList />} />
+      <Route path="/professor/:id" element={<ProfessorDetail />} />
     </Routes>
   );
 }
