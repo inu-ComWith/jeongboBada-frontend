@@ -1,4 +1,4 @@
-//import apiClient from "./apiClient";
+import apiClient from "./axios";
 
 export const signup = async ({ studentId, password, nickname, email }) => {
   const response = await apiClient.post("/api/auth/signup", {
