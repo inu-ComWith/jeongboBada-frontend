@@ -3,16 +3,15 @@ import { useSearchParams } from "react-router-dom";
 import { fetchProfessors, getCachedProfessors } from "../../api/professors";
 import useFetch from "../../hooks/useFetch";
 import ProfessorCard from "../../components/professor-list/ProfessorCard";
-import { SearchIcon } from "../../components/common/Icons";
+import ListNotice from "../../components/professor-list/ListNotice";
+import { NoResultIcon, SearchIcon } from "../../components/common/Icons";
 import Header from "../../components/Header";
-import Footer from "../../components/Footer";
 import page from "./ProfessorPage.module.css";
 import styles from "./ProfessorList.module.css";
 
 const MESSAGES = {
   loading: "교수님 정보를 불러오는 중입니다...",
   error: "교수님 정보를 불러오지 못했습니다.",
-  empty: "검색 결과가 없습니다.",
 };
 
 export default function ProfessorList() {
@@ -45,8 +44,8 @@ export default function ProfessorList() {
     if (e.target.value.trim() === "" && keyword) applyKeyword("");
   };
 
-  const message =
-    status !== "done" ? MESSAGES[status] : filtered.length === 0 ? MESSAGES.empty : "";
+  const isEmpty = status === "done" && filtered.length === 0;
+  const message = status !== "done" ? MESSAGES[status] : "";
 
   return (
     <>
@@ -82,11 +81,25 @@ export default function ProfessorList() {
                 ))}
               </ul>
             )}
-            {message && <p className={page.empty}>{message}</p>}
+            {isEmpty ? (
+              <div className={styles.noResult}>
+                <span className={styles.noResultIcon} aria-hidden="true">
+                  <NoResultIcon />
+                </span>
+                <p className={styles.noResultTitle}>검색하신 결과를 찾을 수 없어요</p>
+                <p className={styles.noResultDesc}>
+                  검색어를 다시 확인하거나
+                  <br />
+                  다른 키워드로 검색해 보세요.
+                </p>
+              </div>
+            ) : (
+              message && <p className={page.empty}>{message}</p>
+            )}
           </div>
         </section>
       </main>
-      <Footer />
+      <ListNotice />
     </>
   );
 }

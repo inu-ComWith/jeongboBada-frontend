@@ -9,8 +9,8 @@ export default function useFetch(fetcher, deps, getCached) {
   const cached = getCached?.();
 
   useEffect(() => {
-    if (getCached?.() !== undefined) return;
-
+    // 캐시가 있어도 조기 리턴하지 않음: fetcher가 캐시를 바로 반환하므로 추가 요청은 없고,
+    // StrictMode에서 첫 실행이 취소된 뒤 캐시만 채워져 화면이 갱신되지 않는 문제를 막음
     const controller = new AbortController();
     fetcher(controller.signal)
       .then((data) => {

@@ -1,6 +1,6 @@
 /* 교수님 상세 페이지 레이아웃
    기본(태블릿): 두꺼운 회색 배너 위로 사진이 걸치는 형태 (시안 4-4-1)
-   데스크탑(1025px 이상): 얇은 회색 띠 아래에 사진이 오는 형태 (시안 Desktop-2)
+   데스크탑(1025px 이상): 더 큰 회색 배너(308px) 위로 사진이 걸치는 형태 (시안 4-4-1)
    각 영역 스타일은 components/professor-detail 폴더의 CSS 참고 */
 
 .banner {
@@ -12,6 +12,7 @@
   display: grid;
   grid-template-columns: 300px 1fr;
   column-gap: 48px;
+  padding-bottom: 150px; /* 아래 푸터와의 간격 (목록 페이지와 동일) */
 }
 
 .content {
@@ -34,16 +35,18 @@
     max-width: 1068px;
   }
 
+  /* 시안 4-4-1: 큰 회색 배너 (사진 위치는 ProfileSidebar.module.css의 .profile margin-top) */
   .banner {
-    height: 43px;
+    height: 308px;
   }
 
   .body {
     grid-template-columns: 360px 1fr;
   }
 
+  /* '교수 소개'가 왼쪽 '교수명' 줄과 같은 높이에 오도록 */
   .content {
-    padding-top: 68px;
+    padding-top: 128px;
   }
 }
 
@@ -54,6 +57,7 @@
 
   .body {
     grid-template-columns: 1fr;
+    padding-bottom: 80px;
   }
 
   .content {
