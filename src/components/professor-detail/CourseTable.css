@@ -1,0 +1,109 @@
+.course-table {
+  grid-column: 2;
+  margin-top: 10px;
+  max-width: 566px;
+}
+
+/* 헤더와 행의 열 위치를 맞추기 위해
+   헤더 좌우 여백 = 표 안쪽 여백(26px) + 행 왼쪽 여백(38px) / 표 안쪽 여백(26px) */
+.course-table__header,
+.course-table__row {
+  display: flex;
+  align-items: center;
+}
+
+.course-table__header {
+  height: 50px;
+  padding: 0 26px 0 64px;
+  background: #858585;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.course-table__body {
+  background: #d9d9d9;
+  padding: 26px;
+}
+
+.course-table__row {
+  height: 70px;
+  padding-left: 38px;
+  background: #858585;
+  color: #fff;
+  font-size: 15px;
+}
+
+.course-table__row + .course-table__row {
+  margin-top: 18px;
+}
+
+.course-table__name {
+  flex: 1;
+  min-width: 0;
+}
+
+.course-table__grade {
+  width: 70px;
+  text-align: center;
+}
+
+.course-table__type {
+  width: 84px;
+  text-align: center;
+}
+
+.chip {
+  display: inline-block;
+  padding: 8px 10px;
+  background: #b3b3b3;
+  font-size: 14px;
+}
+
+.course-table__none {
+  padding: 20px 0;
+  text-align: center;
+  color: #555;
+  font-size: 15px;
+}
+
+@media (max-width: 720px) {
+  /* 표는 아이콘 아래까지 넓게 사용 */
+  .info-section > .course-table {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+  }
+
+  .course-table__header {
+    height: 44px;
+    padding: 0 14px 0 28px;
+    font-size: 14px;
+  }
+
+  .course-table__body {
+    padding: 14px;
+  }
+
+  .course-table__row {
+    height: 56px;
+    padding-left: 14px;
+    font-size: 14px;
+  }
+
+  .course-table__row + .course-table__row {
+    margin-top: 10px;
+  }
+
+  .course-table__grade {
+    width: 56px;
+  }
+
+  .course-table__type {
+    width: 76px;
+  }
+
+  .chip {
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+}
