@@ -13,10 +13,10 @@ import logoImg from "../../assets/logo.png";
 const MAX_ATTEMPTS = 5;
 
 function Login() {
-  /*************************** 테스트 ***************************/
-  const [testMode, setTestMode] = useState(import.meta.env.DEV);
-  const [testAttempts, setTestAttempts] = useState(0);
-  /************************************************************/
+  /****************************** 테스트 ******************************/
+  /* const [testMode, setTestMode] = useState(import.meta.env.DEV); */
+  /* const [testAttempts, setTestAttempts] = useState(0);           */
+  /******************************************************************/
 
   const navigate = useNavigate();
 
@@ -232,36 +232,36 @@ function Login() {
     setIsLoading(true);
 
     /*************************** 테스트 ***************************/
-    if (import.meta.env.DEV && testMode) {
-      const nextAttempts = testAttempts + 1;
+    // if (import.meta.env.DEV && testMode) {
+    //   const nextAttempts = testAttempts + 1;
 
-      setTestAttempts(nextAttempts);
+    //   setTestAttempts(nextAttempts);
 
-      if (nextAttempts >= 5) {
-        const until = Date.now() + 10 * 60 * 1000;
+    //   if (nextAttempts >= 5) {
+    //     const until = Date.now() + 10 * 60 * 1000;
 
-        setLockUntil(until);
-        setNow(Date.now());
+    //     setLockUntil(until);
+    //     setNow(Date.now());
 
-        setNotice({
-          type: "locked",
-          message: "로그인 5회 실패로 10분 동안 로그인이 제한돼요.",
-        });
-      } else {
-        setErrors({
-          password: "학번 또는 비밀번호가 일치하지 않습니다",
-        });
+    //     setNotice({
+    //       type: "locked",
+    //       message: "로그인 5회 실패로 10분 동안 로그인이 제한돼요.",
+    //     });
+    //   } else {
+    //     setErrors({
+    //       password: "학번 또는 비밀번호가 일치하지 않습니다",
+    //     });
 
-        setNotice({
-          type: "mismatch",
-          attempts: nextAttempts,
-          message: "학번 또는 비밀번호가 일치하지 않아요.",
-        });
-      }
+    //     setNotice({
+    //       type: "mismatch",
+    //       attempts: nextAttempts,
+    //       message: "학번 또는 비밀번호가 일치하지 않아요.",
+    //     });
+    //   }
 
-      setIsLoading(false);
-      return;
-    }
+    //   setIsLoading(false);
+    //   return;
+    // }
     /************************************************************************/
 
     try {
