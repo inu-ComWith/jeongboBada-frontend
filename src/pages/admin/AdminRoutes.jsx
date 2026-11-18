@@ -1,16 +1,26 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
+import AdminRoute from "../../components/admin/AdminRoute";
 import AdminLayout from "../../components/admin/AdminLayout";
 import AdminMembers from "./AdminMembers";
+import AdminVerifications from "./AdminVerifications";
+import AdminVerificationDetail from "./AdminVerificationDetail";
 
-// /admin/* 하위 라우트. 권한 가드(AdminRoute)는 로그인 토큰 처리가 들어온 뒤 2단계에서 감싼다.
+// /admin/* 하위 라우트. AdminRoute가 GET /api/users/me 로 ADMIN 여부를 먼저 확인한다.
 function AdminRoutes() {
   return (
     <Routes>
-      <Route element={<AdminLayout />}>
-        <Route index element={<Navigate to="members" replace />} />
-        <Route path="members" element={<AdminMembers />} />
-        <Route path="*" element={<Navigate to="members" replace />} />
+      <Route element={<AdminRoute />}>
+        <Route element={<AdminLayout />}>
+          <Route index element={<Navigate to="verifications" replace />} />
+          <Route path="verifications" element={<AdminVerifications />} />
+          <Route
+            path="verifications/:userId"
+            element={<AdminVerificationDetail />}
+          />
+          <Route path="members" element={<AdminMembers />} />
+          <Route path="*" element={<Navigate to="verifications" replace />} />
+        </Route>
       </Route>
     </Routes>
   );

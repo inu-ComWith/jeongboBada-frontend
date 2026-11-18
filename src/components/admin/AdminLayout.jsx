@@ -1,12 +1,14 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { NavLink, Outlet, useOutletContext } from "react-router-dom";
 
 import styles from "./AdminLayout.module.css";
 import logoImg from "../../assets/logo.png";
+import { getVerifications } from "../../api/admin";
 
 // path가 없는 메뉴는 아직 구현 전이라 비활성(클릭 불가)으로 둔다.
 const MENUS = [
   { label: "대시보드" },
-  { label: "가입 승인" },
+  { label: "가입 승인", path: "/admin/verifications", badge: "pending" },
   { label: "회원 관리", path: "/admin/members" },
   { label: "강의·교수 관리" },
   { label: "후기 관리" },
@@ -17,6 +19,22 @@ const MENUS = [
 ];
 
 function AdminLayout() {
+  const { me } = useOutletContext() ?? {};
+  const [pendingCount, setPendingCount] = useState(null);
+
+  // 사이드바 "가입 승인" 숫자 = 대기 목록 개수. 승인·반려 후 하위 화면에서 다시 부른다.
+  const refreshPendingCount = useCallback(
+    () =>
+      getVerifications("PENDING")
+        .then((list) => setPendingCount(Array.isArray(list) ? list.length : null))
+        .catch(() => setPendingCount(null)),
+    [],
+  );
+
+  useEffect(() => {
+    refreshPendingCount();
+  }, [refreshPendingCount]);
+
   return (
     <div className={styles.layout}>
       <aside className={styles.sidebar}>
@@ -39,6 +57,11 @@ function AdminLayout() {
                 }
               >
                 {menu.label}
+                {menu.badge === "pending" && pendingCount > 0 && (
+                  <span className={styles.badge} aria-label={`대기 ${pendingCount}건`}>
+                    {pendingCount}
+                  </span>
+                )}
               </NavLink>
             ) : (
               <span
@@ -54,7 +77,7 @@ function AdminLayout() {
         </nav>
 
         <div className={styles.footer}>
-          <span>관리자</span>
+          <span>{me?.nickname ? `${me.nickname} · 관리자` : "관리자"}</span>
           <NavLink to="/" className={styles.footerLink}>
             사이트로 이동
           </NavLink>
@@ -62,7 +85,7 @@ function AdminLayout() {
       </aside>
 
       <main className={styles.main}>
-        <Outlet />
+        <Outlet context={{ me, pendingCount, refreshPendingCount }} />
       </main>
     </div>
   );
