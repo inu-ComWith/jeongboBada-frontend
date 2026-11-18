@@ -6,7 +6,7 @@
 }
 
 .section + .section {
-  margin-top: 110px;
+  margin-top: clamp(110px, 2.78vw + 90px, 130px);
 }
 
 /* 원형 아이콘 변형 (기본 모양은 IconCircle.module.css) */
@@ -71,12 +71,6 @@
   font-weight: 500;
   color: #1a2346;
   line-height: 1.6;
-}
-
-@media (min-width: 1025px) {
-  .section + .section {
-    margin-top: 130px;
-  }
 }
 
 @media (max-width: 720px) {

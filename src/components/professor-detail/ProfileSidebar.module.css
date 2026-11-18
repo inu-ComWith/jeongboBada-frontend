@@ -2,12 +2,13 @@
   position: sticky;
   top: 96px; /* 팀 Header 높이(56px) + 여백 40px */
   align-self: start;
-  margin-top: -170px; /* 사진을 배너 위로 걸치게 */
+  /* 사진을 배너 위로 걸치게 (170 ~ 204px 끌어올림) */
+  margin-top: calc(-1 * clamp(170px, 4.72vw + 136px, 204px));
 }
 
 .photo {
-  width: 220px;
-  height: 245px;
+  width: clamp(200px, 6.39vw + 154px, 246px);
+  aspect-ratio: 246 / 273; /* 너비에 맞춰 높이도 시안 비율대로 */
   background: #b8b8b8;
   overflow: hidden;
   display: flex;
@@ -28,13 +29,13 @@
 }
 
 .contacts {
-  margin-top: 46px;
+  margin-top: clamp(46px, 2.22vw + 30px, 62px);
 }
 
 .contact {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: clamp(16px, 1.67vw + 4px, 28px);
   font-size: 16px;
   color: #333;
 }
@@ -62,21 +63,6 @@
   text-decoration: underline;
 }
 
-@media (min-width: 1025px) {
-  .profile {
-    margin-top: 62px;
-  }
-
-  .photo {
-    width: 246px;
-    height: 273px;
-  }
-
-  .contacts {
-    margin-top: 50px;
-  }
-}
-
 @media (max-width: 720px) {
   .profile {
     position: static;
@@ -85,7 +71,6 @@
 
   .photo {
     width: 150px;
-    height: 167px;
   }
 
   .contacts {
