@@ -119,53 +119,79 @@ function Login() {
   const handleLoginError = (error) => {
     const status = error.response?.status;
     const data = error.response?.data;
+    const code = data?.code;
+    const message = data?.message;
 
     if (!error.response) {
       setNotice({
         type: "error",
-        message: "서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.",
+        message: "서버에 연결할 수 없습니다 잠시 후 다시 시도해주세요",
       });
       return;
     }
 
-    if (data?.code === "USER_NOT_FOUND" || data?.code === "ACCOUNT_NOT_FOUND") {
-      setErrors({
-        studentId: "가입되지 않은 학번입니다",
-      });
-
-      setNotice({
-        type: "unregistered",
-        message: "가입되지 않은 학번이에요. 회원가입 후 이용해주세요.",
-      });
-
-      return;
-    }
-
-    if (status === 400) {
+    if (status === 400 && code === "INVALID_INPUT_VALUE") {
       if (Array.isArray(data?.errors) && data.errors.length > 0) {
         handleValidationErrors(data.errors);
       } else {
         setNotice({
           type: "error",
-          message: data?.message || "입력값을 확인해주세요.",
+          message: message || "입력값을 확인해주세요",
         });
       }
+      return;
+    }
+
+    if (status === 404 && code === "STUDENT_ID_NOT_REGISTERED") {
+      setErrors({
+        studentId: "가입되지 않은 학번입니다",
+      });
+      return;
+    }
+
+    if (status === 401 && code === "INVALID_CREDENTIALS") {
+      setErrors({
+        password: "비밀번호가 올바르지 않습니다",
+      });
+
+      setNotice({
+        type: "mismatch",
+        attempts: null,
+        message: message || "비밀번호가 올바르지 않습니다",
+      });
+      return;
+    }
+
+    if (status === 429 && code === "LOGIN_LOCKED") {
+      const retryAfterHeader = error.response?.headers?.["retry-after"];
+
+      const retryAfter = Number(retryAfterHeader);
+
+      if (Number.isFinite(retryAfter) && retryAfter > 0) {
+        setLockUntil(Date.now() + retryAfter * 1000);
+        setNow(Date.now());
+      }
+
+      setNotice({
+        type: "locked",
+        message:
+          message ||
+          "로그인 시도 횟수를 초과했습니다 잠시 후 다시 시도해주세요",
+      });
       return;
     }
 
     if (status >= 500) {
       setNotice({
         type: "error",
-        message:
-          data?.message ||
-          "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        message: "서버 오류가 발생했습니다 잠시 후 다시 시도해주세요",
       });
       return;
     }
 
     setNotice({
       type: "error",
-      message: data?.message || "로그인에 실패했습니다.",
+      message: message || "로그인에 실패했습니다",
     });
   };
 
@@ -234,19 +260,19 @@ function Login() {
         password,
       });
 
-      if (!result.success || !result.data?.accessToken) {
+      if (
+        !result.success ||
+        !result.data?.accessToken ||
+        !result.data?.refreshToken
+      ) {
         throw new Error("INVALID_LOGIN_RESPONSE");
       }
 
       const { accessToken, refreshToken } = result.data;
 
       localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
 
-      if (refreshToken) {
-        localStorage.setItem("refreshToken", refreshToken);
-      }
-
-      // 로그인 성공 후 홈으로 이동
       navigate("/", { replace: true });
     } catch (error) {
       console.error("로그인 실패:", error);
@@ -254,7 +280,7 @@ function Login() {
       if (error.message === "INVALID_LOGIN_RESPONSE") {
         setNotice({
           type: "error",
-          message: "로그인 응답을 처리할 수 없습니다.",
+          message: "로그인 응답을 처리할 수 없습니다",
         });
       } else {
         handleLoginError(error);

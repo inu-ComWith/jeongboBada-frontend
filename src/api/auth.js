@@ -1,12 +1,7 @@
 import apiClient from "./axios";
 
-export const signup = async ({ studentId, password, nickname, email }) => {
-  const response = await apiClient.post("/api/auth/signup", {
-    studentId,
-    password,
-    nickname,
-    email,
-  });
+export const signup = async (formData) => {
+  const response = await apiClient.post("/api/auth/signup", formData);
 
   return response.data;
 };

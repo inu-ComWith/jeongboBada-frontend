@@ -18,13 +18,14 @@ import styles from "./Signup.module.css";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-const nicknamePattern = /^[가-힣a-zA-Z0-9]{2,10}$/;
+const nicknamePattern = /^[가-힣a-zA-Z0-9]{2,6}$/;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const passwordRules = (value) => ({
-  length: value.length >= 8,
+  length: value.length >= 8 && value.length <= 64,
   english: /[a-zA-Z]/.test(value),
   number: /\d/.test(value),
+  bytes: new TextEncoder().encode(value).length <= 72,
 });
 
 const fileSize = (size) => `${(size / (1024 * 1024)).toFixed(1)}MB`;
@@ -150,25 +151,31 @@ export default function Signup() {
     if (!selected) return;
 
     const validExtension = /\.(pdf|jpe?g)$/i.test(selected.name);
+    const validSize = selected.size > 0 && selected.size <= MAX_FILE_SIZE;
 
-    const validType = ["application/pdf", "image/jpeg", ""].includes(
-      selected.type,
-    );
-
-    if (!validExtension || !validType) {
+    if (!validExtension) {
       setFile(null);
       setFileError(
         `pdf, jpg 파일만 올릴 수 있어요 (선택한 파일: ${selected.name})`,
       );
-    } else if (selected.size > MAX_FILE_SIZE) {
+      return;
+    }
+
+    if (!validSize) {
       setFile(null);
       setFileError(
         `10MB 이하 파일만 올릴 수 있어요 (선택한 파일: ${fileSize(selected.size)})`,
       );
-    } else {
-      setFile(selected);
-      setFileError("");
+      return;
     }
+
+    setFile(selected);
+    setFileError("");
+
+    setErrors((prev) => ({
+      ...prev,
+      file: "",
+    }));
   };
 
   // 신분 확인 서류 안내 모달
@@ -193,8 +200,7 @@ export default function Signup() {
     if (!values.nickname.trim()) {
       next.nickname = "닉네임을 입력해주세요";
     } else if (!nicknamePattern.test(values.nickname.trim())) {
-      next.nickname =
-        "2~10자의 한글·영문·숫자만 쓸 수 있어요 (특수문자·공백 불가)";
+      next.nickname = "닉네임은 한글·영문·숫자 2~6자로 입력해주세요";
     } else if (!nicknameValid) {
       next.nickname = "닉네임 중복 확인을 해주세요";
     }
@@ -256,30 +262,63 @@ export default function Signup() {
     } catch (error) {
       console.error("회원가입 실패", error);
 
-      const message =
-        error.response?.data?.message ||
-        "가입 신청 중 오류가 발생했어요 잠시 후 다시 시도해주세요";
+      const status = error.response?.status;
+      const data = error.response?.data;
+      const code = data?.code;
+      const message = data?.message;
 
-      const lower = message.toLowerCase();
+      const nextErrors = {};
 
-      if (lower.includes("email") || message.includes("이메일")) {
-        setErrors((old) => ({
-          ...old,
-          email:
-            "이미 가입된 이메일이에요 로그인 또는 비밀번호 찾기를 이용해주세요",
-        }));
-      } else if (lower.includes("student") || message.includes("학번")) {
-        setErrors((old) => ({
-          ...old,
-          studentId:
-            "이미 가입된 학번이에요 본인이 아니라면 관리자에게 문의해주세요",
-        }));
+      if (status === 400 && code === "INVALID_INPUT_VALUE") {
+        if (Array.isArray(data?.errors)) {
+          data.errors.forEach(({ field, message }) => {
+            if (
+              ["nickname", "email", "studentId", "password", "file"].includes(
+                field,
+              )
+            ) {
+              nextErrors[field] = message;
+            }
+          });
+        }
+
+        if (Object.keys(nextErrors).length === 0) {
+          nextErrors.server = message || "입력값을 확인해주세요";
+        }
+      } else if (code === "FILE_EMPTY") {
+        nextErrors.file = "재학 증빙 서류를 첨부해 주세요";
+      } else if (code === "FILE_TYPE_NOT_ALLOWED") {
+        nextErrors.file = message || "PDF 또는 JPG 파일만 첨부할 수 있어요";
+      } else if (code === "FILE_TOO_LARGE") {
+        nextErrors.file = message || "파일 크기는 10MB 이하여야 해요";
+      } else if (status === 409) {
+        switch (code) {
+          case "DUPLICATE_STUDENT_ID":
+            nextErrors.studentId = "이미 가입된 학번이에요";
+            break;
+
+          case "DUPLICATE_NICKNAME":
+            nextErrors.nickname = "이미 사용 중인 닉네임이에요";
+            setNicknameStatus("duplicate");
+            break;
+
+          case "DUPLICATE_EMAIL":
+            nextErrors.email = "이미 가입된 이메일이에요";
+            break;
+
+          default:
+            nextErrors.server = message || "이미 가입된 정보가 있어요";
+        }
+      } else if (code === "UNSUPPORTED_MEDIA_TYPE") {
+        nextErrors.server = "파일 전송 형식을 확인해주세요";
+      } else if (code === "FILE_UPLOAD_FAILED") {
+        nextErrors.server = "잠시 후 다시 시도해 주세요";
       } else {
-        setErrors((old) => ({
-          ...old,
-          server: message,
-        }));
+        nextErrors.server =
+          message || "가입 신청 중 오류가 발생했어요 잠시 후 다시 시도해주세요";
       }
+
+      setErrors(nextErrors);
     } finally {
       setLoading(false);
     }
