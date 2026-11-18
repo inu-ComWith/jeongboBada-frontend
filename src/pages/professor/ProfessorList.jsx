@@ -54,6 +54,12 @@ export default function ProfessorList() {
         <section className={styles.hero}>
           <div className={page.container}>
             <h1 className={styles.heroTitle}>교수님 정보</h1>
+          </div>
+        </section>
+
+        {/* 검색바 띠만 스크롤 시 헤더 아래에 고정 (hero 밖에 두어야 hero가 지나가도 계속 고정됨) */}
+        <div className={styles.searchBar}>
+          <div className={page.container}>
             <form className={styles.search} role="search" onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -68,7 +74,7 @@ export default function ProfessorList() {
               </button>
             </form>
           </div>
-        </section>
+        </div>
 
         <section className={styles.list}>
           <div className={page.container}>

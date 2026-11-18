@@ -1,6 +1,10 @@
+/* 교수님 카드
+   크기 값은 clamp(최솟값, 창 너비에 따라 변하는 값, 최댓값)으로 지정
+   → 창 크기를 줄이면 1440px 시안 크기에서 모바일 크기까지 자연스럽게 줄어듦 */
+
 .card {
   display: flex;
-  height: 170px;
+  height: clamp(120px, 10vw + 40px, 170px);
   background: #f3f3f3;
   color: inherit;
   text-decoration: none;
@@ -12,7 +16,7 @@
 }
 
 .photo {
-  flex: 0 0 178px;
+  flex: 0 0 clamp(110px, 8vw + 60px, 178px);
   background: #d9d9d9;
   display: flex;
   align-items: center;
@@ -20,8 +24,8 @@
 }
 
 .photo svg {
-  width: 96px;
-  height: 104px;
+  width: 54%;
+  height: auto;
 }
 
 .photo img {
@@ -31,14 +35,15 @@
 }
 
 .info {
-  padding: 26px 30px;
-  min-width: 0;
+  flex: 1;
+  min-width: 0; /* 글자가 길어도 카드 밖으로 넘치지 않도록 */
+  padding: clamp(16px, 1.8vw, 26px) clamp(16px, 2.1vw, 30px);
 }
 
 .name {
-  font-size: 24px;
+  font-size: clamp(18px, 0.8vw + 12px, 24px);
   font-weight: 500;
-  margin-bottom: 26px;
+  margin-bottom: clamp(14px, 1.8vw, 26px);
 }
 
 .name strong {
@@ -54,7 +59,7 @@
 }
 
 .meta + .meta {
-  margin-top: 10px;
+  margin-top: clamp(6px, 0.7vw, 10px);
 }
 
 .meta svg {
@@ -62,57 +67,4 @@
   color: #222;
   width: 18px;
   height: 18px;
-}
-
-/* 태블릿 */
-@media (max-width: 1024px) {
-  .card {
-    height: 150px;
-  }
-
-  .photo {
-    flex-basis: 140px;
-  }
-
-  .photo svg {
-    width: 78px;
-    height: 84px;
-  }
-
-  .info {
-    padding: 22px 20px;
-  }
-
-  .name {
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
-}
-
-@media (max-width: 720px) {
-  .card {
-    height: 120px;
-  }
-
-  .photo {
-    flex-basis: 110px;
-  }
-
-  .photo svg {
-    width: 60px;
-    height: 66px;
-  }
-
-  .info {
-    padding: 18px 16px;
-  }
-
-  .name {
-    font-size: 18px;
-    margin-bottom: 14px;
-  }
-
-  .meta + .meta {
-    margin-top: 6px;
-  }
 }

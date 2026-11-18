@@ -1,19 +1,27 @@
 /* 교수님 목록 페이지 (카드 스타일은 components/professor-list/ProfessorCard.module.css) */
 
-/* 상단 타이틀 + 검색 */
+/* 상단 타이틀 영역 (스크롤 시 함께 올라감) */
 .hero {
-  position: sticky;
-  top: 56px; /* 팀 Header 높이만큼 아래에 고정 */
-  z-index: 10;
   background: #f4f4f4;
-  padding: 106px 0 62px;
+  /* 제목 ~ 검색바 간격 46px = 아래 패딩(22) + .searchBar 위 패딩(24)
+     제목에 margin-bottom을 주면 hero 밖으로 빠져나가 흰 틈이 생기므로 padding으로 처리 */
+  padding: clamp(56px, 7.4vw, 106px) 0 22px; /* 위 패딩은 창 너비에 따라 56~106px */
 }
 
 .heroTitle {
-  font-size: 30px;
+  font-size: clamp(24px, 0.8vw + 18px, 30px);
   font-weight: 700;
   color: #333;
-  margin-bottom: 46px;
+}
+
+/* 검색바 고정 영역 (회색 띠 + 검색바)
+   제목은 스크롤 시 올라가고, 이 띠만 헤더(56px) 바로 아래에 고정됨 */
+.searchBar {
+  position: sticky;
+  top: 56px;
+  z-index: 10;
+  background: #f4f4f4;
+  padding: 24px 0 62px; /* 위 패딩 = 고정됐을 때 헤더 ~ 검색창 간격 */
 }
 
 .search {
@@ -58,38 +66,29 @@
 
 /* 교수님 카드 목록 */
 .list {
-  padding: 60px 0 0;
+  padding: clamp(32px, 4.2vw, 60px) 0 0;
 }
 
+/* 카드 한 장이 최소 420px을 확보할 수 있으면 2열, 아니면 자동으로 1열 */
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px 22px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+  gap: clamp(16px, 2.2vw, 32px) clamp(16px, 1.5vw, 22px);
 }
 
 @media (max-width: 720px) {
   .hero {
-    padding: 56px 0 40px;
+    padding-bottom: 12px; /* 아래 패딩 12 + .searchBar 위 패딩(12) = 제목 ~ 검색바 간격 24px */
   }
 
-  .heroTitle {
-    font-size: 24px;
-    margin-bottom: 24px;
+  .searchBar {
+    padding: 12px 0 40px;
   }
 
   .searchInput {
     height: 48px;
     font-size: 16px;
     padding-left: 18px;
-  }
-
-  .list {
-    padding-top: 32px;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
   }
 }
 
