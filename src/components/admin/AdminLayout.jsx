@@ -9,7 +9,8 @@ import { getVerifications } from "../../api/admin";
 const MENUS = [
   { label: "대시보드" },
   { label: "가입 승인", path: "/admin/verifications", badge: "pending" },
-  { label: "회원 관리", path: "/admin/members" },
+  // 회원 관리 화면(AdminMembers)은 가짜 데이터라 API 연결 전까지 막아 둔다.
+  { label: "회원 관리" },
   { label: "강의·교수 관리" },
   { label: "후기 관리" },
   { label: "신고 관리" },
