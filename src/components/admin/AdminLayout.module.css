@@ -102,3 +102,44 @@ a.menu:hover {
   min-width: 0;
   padding: 32px 40px 48px;
 }
+
+.badge {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 권한 확인 중 / 실패 화면 (AdminRoute) */
+.guard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 100vh;
+  background: #f5f5f5;
+  font-size: 15px;
+  color: #333;
+}
+
+.guard p {
+  margin: 0;
+}
+
+.guardSub {
+  font-size: 13px;
+  color: #595959;
+}
+
+.guardButton {
+  margin-top: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 4px;
+  background: #333;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
