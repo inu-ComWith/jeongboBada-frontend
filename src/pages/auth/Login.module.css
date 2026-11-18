@@ -197,3 +197,20 @@
   height: 14px;
   background: #ccc;
 }
+
+.successToast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  background: #333;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.successToast svg {
+  flex-shrink: 0;
+}

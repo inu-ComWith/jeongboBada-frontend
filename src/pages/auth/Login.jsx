@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, AlertTriangle } from "lucide-react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Eye, EyeOff, AlertTriangle, CheckCircle2 } from "lucide-react";
 
 import { login } from "../../api/auth";
 
@@ -19,6 +19,11 @@ function Login() {
   /******************************************************************/
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [showSuccessToast, setShowSuccessToast] = useState(() =>
+    Boolean(location.state?.passwordResetSuccess),
+  );
 
   const [studentId, setStudentId] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +43,22 @@ function Login() {
 
   // 카운트다운
   const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    if (!showSuccessToast) return;
+
+    // 새로고침 시 알림이 다시 나타나지 않도록 이동 상태 제거
+    navigate(location.pathname, {
+      replace: true,
+      state: null,
+    });
+
+    const timer = setTimeout(() => {
+      setShowSuccessToast(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [showSuccessToast, navigate, location.pathname]);
 
   useEffect(() => {
     if (!lockUntil) return;
@@ -302,6 +323,15 @@ function Login() {
             className={styles.profileImage}
           />
 
+          {location.state?.passwordResetSuccess && (
+            <div className={styles.successToast} role="status">
+              <CheckCircle2 size={17} />
+              <span>
+                비밀번호가 변경되었습니다 새 비밀번호로 로그인해주세요
+              </span>
+            </div>
+          )}
+
           {notice && (
             <div className={styles.notice} role="alert">
               <AlertTriangle size={20} />
@@ -410,7 +440,7 @@ function Login() {
                 </Link>
               ) : (
                 <div className={styles.helpActions}>
-                  <Link to="/find-password">계정을 잃어버렸어요</Link>
+                  <Link to="/password-reset">계정을 잃어버렸어요</Link>
 
                   <span className={styles.separator} />
 

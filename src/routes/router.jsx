@@ -4,7 +4,7 @@ import Home from "../pages/dashboard/Home";
 import About from "../pages/dashboard/About";
 import Signup from "../pages/auth/Signup";
 import Login from "../pages/auth/Login";
-import FindPw from "../pages/auth/FindPw";
+import ResetPw from "../pages/auth/ResetPw";
 import ProfessorList from "../pages/professor/ProfessorList";
 import ProfessorDetail from "../pages/professor/ProfessorDetail";
 import AdminRoutes from "../pages/admin/AdminRoutes";
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       { path: "/about", element: <About /> },
       { path: "/login", element: <Login /> },
       { path: "/signup", element: <Signup /> },
-      { path: "/find-password", element: <FindPw /> },
+      { path: "/password-reset", element: <ResetPw /> },
       { path: "/professor/list", element: <ProfessorList /> },
       { path: "/professor/:id", element: <ProfessorDetail /> },
       { path: "/admin/*", element: <AdminRoutes /> },

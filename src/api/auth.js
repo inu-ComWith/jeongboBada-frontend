@@ -33,3 +33,31 @@ export const reissue = async (refreshToken) => {
 
   return response.data;
 };
+
+export const sendPasswordResetCode = async ({ studentId, email }) => {
+  const response = await apiClient.post("/api/auth/password-reset/send-code", {
+    studentId,
+    email,
+  });
+
+  return response.data;
+};
+
+export const verifyPasswordResetCode = async ({ studentId, code }) => {
+  const response = await apiClient.post(
+    "/api/auth/password-reset/verify-code",
+    { studentId, code },
+  );
+
+  return response.data;
+};
+
+export const resetPassword = async ({ studentId, code, newPassword }) => {
+  const response = await apiClient.post("/api/auth/password-reset", {
+    studentId,
+    code,
+    newPassword,
+  });
+
+  return response.data;
+};
