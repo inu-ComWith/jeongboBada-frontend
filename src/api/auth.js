@@ -61,3 +61,11 @@ export const resetPassword = async ({ studentId, code, newPassword }) => {
 
   return response.data;
 };
+
+export const logout = async (refreshToken) => {
+  const response = await apiClient.post("/api/auth/logout", {
+    refreshToken,
+  });
+
+  return response.data;
+};

@@ -73,13 +73,20 @@ const request = async (config) => {
   }
 };
 
-export const hasAccessToken = () => Boolean(localStorage.getItem("accessToken"));
+export const hasAccessToken = () =>
+  Boolean(localStorage.getItem("accessToken"));
 
 // 내 정보 { nickname, studentId, email, department, role }
 export const getMe = () => request({ method: "get", url: "/api/users/me" });
 
 // 헤더처럼 페이지마다 다시 그려지는 곳에서 쓰는 캐시 버전. 토큰이 바뀌면 다시 조회한다.
 let meCache = { token: null, promise: null };
+
+// 로그아웃 시 캐시를 초기화할 함수
+export const clearMeCache = () => {
+  meCache = { token: null, promise: null };
+};
+
 export const getMeCached = () => {
   const token = localStorage.getItem("accessToken");
   if (!token) return Promise.reject(new AdminApiError({ status: 401 }));
@@ -95,14 +102,21 @@ export const getMeCached = () => {
 
 // status: "PENDING" | "APPROVED" | "REJECTED"
 export const getVerifications = (status) =>
-  request({ method: "get", url: "/api/admin/verifications", params: { status } });
+  request({
+    method: "get",
+    url: "/api/admin/verifications",
+    params: { status },
+  });
 
 // { applicant, documentUrl } — documentUrl은 5분 뒤 만료, 처리된 신청은 null
 export const getVerification = (userId) =>
   request({ method: "get", url: `/api/admin/verifications/${userId}` });
 
 export const approveVerification = (userId) =>
-  request({ method: "post", url: `/api/admin/verifications/${userId}/approve` });
+  request({
+    method: "post",
+    url: `/api/admin/verifications/${userId}/approve`,
+  });
 
 export const rejectVerification = (userId, reason) =>
   request({
