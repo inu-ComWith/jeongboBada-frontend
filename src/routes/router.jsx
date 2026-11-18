@@ -7,6 +7,7 @@ import Login from "../pages/auth/Login";
 import FindPw from "../pages/auth/FindPw";
 import ProfessorList from "../pages/professor/ProfessorList";
 import ProfessorDetail from "../pages/professor/ProfessorDetail";
+import AdminRoutes from "../pages/admin/AdminRoutes";
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/find-password" element={<FindPw />} />
       <Route path="/professor/list" element={<ProfessorList />} />
       <Route path="/professor/:id" element={<ProfessorDetail />} />
+      <Route path="/admin/*" element={<AdminRoutes />} />
     </Routes>
   );
 }
