@@ -19,9 +19,10 @@ export default function ListNotice() {
     <footer className={styles.notice}>
       <img src={logoImg} alt="" className={styles.logo} />
       <p className={styles.text}>
-        본 페이지의 교수진 정보는 학과에서 제공한 자료를 기준으로 작성되었으며,
+        {/* 좁은 화면에서 <br>을 숨기면 줄이 붙지 않도록 공백({" "})을 함께 둠 */}
+        본 페이지의 교수진 정보는 학과에서 제공한 자료를 기준으로 작성되었으며,{" "}
         <br />
-        소속 및 연락처는 변경될 수 있습니다. 최신 정보는 학과 공식 홈페이지를 통해
+        소속 및 연락처는 변경될 수 있습니다. 최신 정보는 학과 공식 홈페이지를 통해{" "}
         <br />
         확인하시기 바랍니다.
       </p>
