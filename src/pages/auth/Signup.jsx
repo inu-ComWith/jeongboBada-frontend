@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useBeforeUnload } from "react-router-dom";
+import { useNavigate, useBeforeUnload, useBlocker } from "react-router-dom";
 import {
   Check,
   X,
@@ -64,6 +64,13 @@ export default function Signup() {
   const nicknameRequest = useRef(0);
 
   const hasChanges = Object.values(values).some(Boolean) || Boolean(file);
+
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      hasChanges &&
+      !complete &&
+      currentLocation.pathname !== nextLocation.pathname,
+  );
 
   const rules = passwordRules(values.password);
   const passwordValid = Object.values(rules).every(Boolean);
@@ -289,12 +296,14 @@ export default function Signup() {
     ) : null;
 
   const leave = () => {
-    if (hasChanges && !complete) {
-      setShowLeave(true);
-    } else {
-      navigate("/login");
-    }
+    navigate("/login");
   };
+
+  useEffect(() => {
+    if (blocker.state === "blocked") {
+      setShowLeave(true);
+    }
+  }, [blocker.state]);
 
   if (complete) {
     return (
@@ -747,7 +756,13 @@ export default function Signup() {
             <button
               type="button"
               className={styles.modalClose}
-              onClick={() => setShowLeave(false)}
+              onClick={() => {
+                setShowLeave(false);
+
+                if (blocker.state === "blocked") {
+                  blocker.reset();
+                }
+              }}
               aria-label="닫기"
             >
               <X size={19} />
@@ -757,11 +772,29 @@ export default function Signup() {
             <p>지금 나가면 입력한 내용이 저장되지 않아요</p>
 
             <div className={styles.modalActions}>
-              <button type="button" onClick={() => navigate("/login")}>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLeave(false);
+
+                  if (blocker.state === "blocked") {
+                    blocker.proceed();
+                  }
+                }}
+              >
                 나가기
               </button>
 
-              <button type="button" onClick={() => setShowLeave(false)}>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLeave(false);
+
+                  if (blocker.state === "blocked") {
+                    blocker.reset();
+                  }
+                }}
+              >
                 계속 작성하기
               </button>
             </div>
