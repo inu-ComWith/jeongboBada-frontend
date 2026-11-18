@@ -10,12 +10,12 @@ import Footer from "../../components/Footer";
 import styles from "./Login.module.css";
 import logoImg from "../../assets/logo.png";
 
-const MAX_ATTEMPTS = 5;
+const MAX_ATTEMPTS = 5; //로그인 실패 허용 횟수
 
 function Login() {
   /****************************** 테스트 ******************************/
-  /* const [testMode, setTestMode] = useState(import.meta.env.DEV); */
-  /* const [testAttempts, setTestAttempts] = useState(0);           */
+  // const [testMode, setTestMode] = useState(import.meta.env.DEV);
+  // const [testAttempts, setTestAttempts] = useState(0);
   /******************************************************************/
 
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ function Login() {
   // 입력 필드 오류
   const [errors, setErrors] = useState({});
 
-  // 상단 오류 배너
+  // 로그인 오류 alert
   const [notice, setNotice] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -44,10 +44,10 @@ function Login() {
 
     const timer = setInterval(() => {
       setNow(Date.now());
-    }, 1000);
+    }, 1000); //1초 단위로 카운트다운
 
     return () => clearInterval(timer);
-  }, [lockUntil]);
+  }, [lockUntil]); //기존 타이머 정리 -> 타이머 중복 생성 방지
 
   const remainingSeconds = lockUntil
     ? Math.max(0, Math.ceil((lockUntil - now) / 1000))
@@ -85,7 +85,7 @@ function Login() {
 
     if (!studentId.trim()) {
       newErrors.studentId = "학번을 입력해주세요";
-    } else if (!/^\d{9}$/.test(studentId)) {
+    } else if (studentId.trim().length !== 9) {
       newErrors.studentId = "학번은 숫자 9자리로 입력해주세요";
     }
 
@@ -95,7 +95,7 @@ function Login() {
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors).length === 0; //오류 저장 배열 길이가 0이면 true, 아니면 false 반환
   };
 
   const handleValidationErrors = (serverErrors) => {
@@ -120,9 +120,6 @@ function Login() {
     const status = error.response?.status;
     const data = error.response?.data;
 
-    const code = data?.code;
-    const message = data?.message;
-
     if (!error.response) {
       setNotice({
         type: "error",
@@ -131,22 +128,7 @@ function Login() {
       return;
     }
 
-    if (status === 400) {
-      const hasFieldErrors =
-        Array.isArray(data?.errors) && handleValidationErrors(data.errors);
-
-      if (!hasFieldErrors) {
-        setNotice({
-          type: "error",
-          message: message || "입력값을 확인해주세요.",
-        });
-      }
-
-      return;
-    }
-
-    // 미가입 학번: 실제 서버 코드 확인 필요
-    if (code === "USER_NOT_FOUND" || code === "ACCOUNT_NOT_FOUND") {
+    if (data?.code === "USER_NOT_FOUND" || data?.code === "ACCOUNT_NOT_FOUND") {
       setErrors({
         studentId: "가입되지 않은 학번입니다",
       });
@@ -159,63 +141,31 @@ function Login() {
       return;
     }
 
-    // 로그인 제한: 서버에서 제한 시간 제공 시 처리
-    if (status === 429 || code === "ACCOUNT_LOCKED") {
-      const retryAfter = Number(
-        data?.data?.remainingSeconds ?? data?.remainingSeconds,
-      );
-
-      const seconds =
-        Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : 0;
-
-      if (seconds > 0) {
-        setLockUntil(Date.now() + seconds * 1000);
-        setNow(Date.now());
+    if (status === 400) {
+      if (Array.isArray(data?.errors) && data.errors.length > 0) {
+        handleValidationErrors(data.errors);
+      } else {
+        setNotice({
+          type: "error",
+          message: data?.message || "입력값을 확인해주세요.",
+        });
       }
-
-      setNotice({
-        type: "locked",
-        message:
-          message ||
-          "로그인 시도 횟수를 초과했습니다. 잠시 후 다시 시도해주세요.",
-      });
-
-      return;
-    }
-
-    if (status === 401) {
-      const failedAttempts = Number(
-        data?.data?.failedAttempts ?? data?.failedAttempts,
-      );
-
-      const hasAttempts =
-        Number.isInteger(failedAttempts) && failedAttempts >= 0;
-
-      setErrors({
-        password: "학번 또는 비밀번호가 일치하지 않습니다",
-      });
-
-      setNotice({
-        type: "mismatch",
-        attempts: hasAttempts ? failedAttempts : null,
-        message: message || "학번 또는 비밀번호가 일치하지 않아요.",
-      });
-
       return;
     }
 
     if (status >= 500) {
       setNotice({
         type: "error",
-        message: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        message:
+          data?.message ||
+          "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
       });
-
       return;
     }
 
     setNotice({
       type: "error",
-      message: message || "로그인에 실패했습니다.",
+      message: data?.message || "로그인에 실패했습니다.",
     });
   };
 
@@ -233,6 +183,20 @@ function Login() {
 
     /*************************** 테스트 ***************************/
     // if (import.meta.env.DEV && testMode) {
+    //   setErrors({
+    //     studentId: "가입되지 않은 학번입니다",
+    //   });
+
+    //   setNotice({
+    //     type: "unregistered",
+    //     message: "가입되지 않은 학번이에요 회원가입 후 이용해주세요",
+    //   });
+
+    //   setIsLoading(false);
+    //   return;
+    // }
+
+    // if (import.meta.env.DEV && testMode) {
     //   const nextAttempts = testAttempts + 1;
 
     //   setTestAttempts(nextAttempts);
@@ -245,7 +209,7 @@ function Login() {
 
     //     setNotice({
     //       type: "locked",
-    //       message: "로그인 5회 실패로 10분 동안 로그인이 제한돼요.",
+    //       message: "로그인 5회 실패로 10분 동안 로그인이 제한돼요",
     //     });
     //   } else {
     //     setErrors({
@@ -255,7 +219,7 @@ function Login() {
     //     setNotice({
     //       type: "mismatch",
     //       attempts: nextAttempts,
-    //       message: "학번 또는 비밀번호가 일치하지 않아요.",
+    //       message: "학번 또는 비밀번호가 일치하지 않아요",
     //     });
     //   }
 
@@ -312,10 +276,9 @@ function Login() {
             className={styles.profileImage}
           />
 
-          {/* 로그인 오류 배너 */}
           {notice && (
             <div className={styles.notice} role="alert">
-              <AlertTriangle size={18} />
+              <AlertTriangle size={20} />
 
               <div>
                 {notice.type === "mismatch" ? (
@@ -327,7 +290,7 @@ function Login() {
                     {notice.attempts !== null && (
                       <>
                         <br />
-                        5회 틀리면 10분 동안 로그인이 제한돼요.
+                        5회 틀리면 10분 동안 로그인이 제한돼요
                       </>
                     )}
                   </>
@@ -335,7 +298,7 @@ function Login() {
                   <>
                     {notice.message}
                     <br />
-                    비밀번호가 기억나지 않으면 비밀번호 찾기를 이용해주세요.
+                    비밀번호가 기억나지 않으면 비밀번호 찾기를 이용해주세요
                   </>
                 ) : (
                   notice.message
@@ -362,7 +325,7 @@ function Login() {
                   className={errors.studentId ? styles.inputError : ""}
                 />
 
-                {errors.studentId && (
+                {errors.studentId && notice?.type !== "unregistered" && (
                   <span className={styles.errorText}>{errors.studentId}</span>
                 )}
               </div>
@@ -408,11 +371,7 @@ function Login() {
                 className={styles.loginButton}
                 disabled={isLoading || isLocked}
               >
-                {isLocked
-                  ? `${countdown} 후 다시 시도할 수 있어요`
-                  : isLoading
-                    ? "로그인 중..."
-                    : "로그인"}
+                {isLocked ? `${countdown} 후 다시 시도할 수 있어요` : "로그인"}
               </button>
 
               {notice?.type === "locked" ? (
@@ -420,12 +379,10 @@ function Login() {
                   비밀번호 찾기
                 </Link>
               ) : notice?.type === "unregistered" ? (
-                // 미가입 학번
                 <Link to="/signup" className={styles.secondaryButton}>
                   회원가입 하러 가기
                 </Link>
               ) : (
-                // 기본 링크
                 <div className={styles.helpActions}>
                   <Link to="/find-password">계정을 잃어버렸어요</Link>
 
