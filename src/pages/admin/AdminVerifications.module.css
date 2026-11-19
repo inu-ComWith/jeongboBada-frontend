@@ -1,0 +1,205 @@
+.page {
+  max-width: 1280px;
+}
+
+.code {
+  margin: 0;
+  font-size: 12px;
+  color: #595959;
+}
+
+.title {
+  margin: 4px 0 8px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
+}
+
+.desc {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: #595959;
+}
+
+/* 탭 */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.tab {
+  height: 44px;
+  padding: 0 18px;
+  margin-bottom: -1px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  color: #595959;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: #222;
+}
+
+.tabActive {
+  border-bottom-color: #222;
+  font-weight: 700;
+  color: #222;
+}
+
+/* 안내 */
+.notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 13px;
+  color: #222;
+}
+
+.noticeClose {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
+  color: #595959;
+  cursor: pointer;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.outlineButton {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  color: #222;
+  cursor: pointer;
+}
+
+.outlineButton:hover:not(:disabled) {
+  background: #f0f0f0;
+}
+
+.outlineButton:disabled {
+  color: #b0b0b0;
+  cursor: not-allowed;
+}
+
+/* 표 */
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: #222;
+}
+
+.table th {
+  height: 44px;
+  padding: 0 16px;
+  background: #f7f7f7;
+  border-bottom: 1px solid #e5e5e5;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  color: #333;
+}
+
+.table td {
+  height: 58px;
+  padding: 0 16px;
+  border-bottom: 1px solid #efefef;
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.overdue {
+  font-weight: 700;
+}
+
+.reason {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border: 1px solid #bdbdbd;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #333;
+}
+
+.APPROVED {
+  border-color: #333;
+  background: #333;
+  color: #fff;
+}
+
+.REJECTED {
+  border-style: dashed;
+  color: #595959;
+}
+
+.reviewButton {
+  height: 34px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 4px;
+  background: #333;
+  font: inherit;
+  font-size: 13px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.reviewButton:hover {
+  background: #111;
+}
+
+.stateCell {
+  height: 160px !important;
+  text-align: center;
+  white-space: normal !important;
+  color: #595959;
+}
+
+.errorText {
+  margin: 0 0 12px;
+  color: #b42318;
+}
+
+.footnote {
+  margin: 16px 0 0;
+  font-size: 12px;
+  color: #595959;
+}

@@ -1,16 +1,42 @@
-import { createBrowserRouter } from "react-router-dom";
-import Home from "../pages/Home";
-import Login from "../pages/Login";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+
+import Home from "../pages/dashboard/Home";
+import About from "../pages/dashboard/About";
+import Signup from "../pages/auth/Signup";
+import Login from "../pages/auth/Login";
+import ResetPw from "../pages/auth/ResetPw";
+import ProfessorList from "../pages/professor/ProfessorList";
+import ProfessorDetail from "../pages/professor/ProfessorDetail";
+import AdminRoutes from "../pages/admin/AdminRoutes";
+import ScrollManager from "../components/common/ScrollManager";
+
+function Layout() {
+  return (
+    <>
+      <ScrollManager />
+      <Outlet />
+    </>
+  );
+}
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
+    element: <Layout />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/about", element: <About /> },
+      { path: "/login", element: <Login /> },
+      { path: "/signup", element: <Signup /> },
+      { path: "/password-reset", element: <ResetPw /> },
+      { path: "/professor/list", element: <ProfessorList /> },
+      { path: "/professor/:id", element: <ProfessorDetail /> },
+      { path: "/admin/*", element: <AdminRoutes /> },
+    ],
   },
 ]);
 
-export default router;
+function Router() {
+  return <RouterProvider router={router} />;
+}
+
+export default Router;

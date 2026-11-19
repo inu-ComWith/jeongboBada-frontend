@@ -1,0 +1,58 @@
+/* 교수님 상세 페이지 레이아웃 (시안 4-4-1: 회색 배너 위로 사진이 걸치는 형태)
+   크기 값은 clamp(최솟값, 창 너비에 따라 변하는 값, 최댓값)
+   → 창 너비 720px ~ 1440px 사이에서 태블릿 크기 ~ 시안 크기로 자연스럽게 바뀜
+   720px 이하(모바일)는 아래 @media에서 한 줄 배치로 전환
+   각 영역 스타일은 components/professor-detail 폴더의 CSS 참고 */
+
+/* 공통 .container보다 조금 좁게 (ProfessorPage.module.css 다음에 불러와서 덮어씀) */
+.container {
+  max-width: 1068px;
+}
+
+.banner {
+  height: clamp(240px, 9.44vw + 172px, 308px);
+  background: #d9d9d9;
+}
+
+.body {
+  display: grid;
+  /* 왼쪽 사이드바 너비 240 ~ 360px */
+  grid-template-columns: clamp(240px, 16.67vw + 120px, 360px) 1fr;
+  column-gap: clamp(28px, 2.78vw + 8px, 48px);
+  padding-bottom: 150px; /* 아래 푸터와의 간격 (목록 페이지와 동일) */
+}
+
+/* '교수 소개'가 왼쪽 '교수명' 줄과 비슷한 높이에 오도록 */
+.content {
+  padding-top: clamp(56px, 10vw - 16px, 128px);
+  min-width: 0;
+}
+
+/* 연구 분야 태그 */
+.tag {
+  padding: 4px 10px;
+  background: #a8a8a8;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+}
+
+@media (max-width: 720px) {
+  .banner {
+    height: 160px;
+  }
+
+  .body {
+    grid-template-columns: 1fr;
+    padding-bottom: 80px;
+  }
+
+  .content {
+    padding-top: 48px;
+  }
+
+  .tag {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+}

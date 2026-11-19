@@ -1,0 +1,380 @@
+.page {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px 110px;
+  color: #292929;
+  box-sizing: border-box;
+}
+
+.findSection {
+  width: 100%;
+  max-width: 560px;
+  text-align: center;
+}
+
+.pageTitle {
+  margin: 0 0 22px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.description {
+  margin: 0 0 22px;
+  color: #777;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.formCard {
+  border: 1px solid #dedede;
+  padding: 36px 63px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+  background: #fff;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 36px;
+}
+
+.fieldRow > label {
+  padding-top: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fieldContent {
+  width: 300px;
+}
+
+.inputWrap {
+  position: relative;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  height: 48px;
+  box-sizing: border-box;
+  padding: 0 18px;
+  border: 1px solid #c9c9c9;
+  border-radius: 0;
+  background: #fff;
+  color: #292929;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.input::placeholder {
+  color: #aaa;
+}
+
+.input:focus {
+  border-color: #3868cb;
+}
+
+.inputError,
+.inputError:focus {
+  border: 2px solid #f02e35;
+}
+
+.fieldError {
+  margin: 6px 0 0;
+  color: #ed3037;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.primaryButton {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px;
+  border: none;
+  border-radius: 0;
+  background: #333;
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.primaryButton:disabled {
+  background: #dedede;
+  color: #969696;
+  cursor: not-allowed;
+}
+
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  margin-bottom: 18px;
+  background: #fff0f0;
+  color: #e52c33;
+  font-size: 13px;
+  text-align: left;
+}
+
+.helpBox {
+  padding: 18px;
+  background: #f5f5f5;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.helpBox p {
+  margin: 0 0 12px;
+}
+
+.supportButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px;
+  border: 1px solid #333;
+  background: #fff;
+  color: #292929;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.backLink {
+  display: block;
+  margin: 22px auto 0;
+  border: none;
+  background: transparent;
+  color: #777;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgb(0 0 0 / 25%);
+  box-sizing: border-box;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  padding: 40px 36px 32px;
+  box-sizing: border-box;
+  background: #fff;
+  box-shadow: 0 4px 0 rgb(0 0 0 / 10%);
+}
+
+.closeButton {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+}
+
+.circleIcon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: #f0f0f0;
+}
+
+.modalTitle {
+  margin: 0 0 18px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.modalDescription {
+  margin: 0 0 24px;
+  color: #777;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.modalDescription strong {
+  color: #292929;
+}
+
+.codeContainer {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 22px 20px;
+  cursor: text;
+}
+
+.codeBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  border: 2px solid #c5c5c5;
+  background: #fff;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.codeBoxActive {
+  border-color: #333;
+}
+
+.codeBoxError {
+  border-color: #f02e35;
+}
+
+.codeHiddenInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.codeMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  gap: 10px;
+}
+
+.timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #777;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.dangerText {
+  color: #ed3037;
+}
+
+.resendLink {
+  border: none;
+  background: transparent;
+  color: #777;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.resendLink:disabled {
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.codeError {
+  margin: -2px 0 20px;
+  color: #ed3037;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 10px;
+}
+
+.buttonRow > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 22px;
+  background: #333;
+  color: #fff;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.resetDescription {
+  margin: -10px 0 36px;
+  color: #777;
+  font-size: 14px;
+}
+
+.passwordForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.eyeButton {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+}
+
+.passwordForm .input {
+  padding-right: 45px;
+}
+
+.ruleList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+  color: #999;
+  font-size: 12px;
+}
+
+.rulePass {
+  color: #3269d2;
+}
+
+.passwordForm > .primaryButton {
+  margin-top: 4px;
+}
+
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout > main {
+  flex: 1;
+  min-height: 0;
+}

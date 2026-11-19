@@ -1,0 +1,70 @@
+/* 교수님 카드
+   크기 값은 clamp(최솟값, 창 너비에 따라 변하는 값, 최댓값)으로 지정
+   → 창 크기를 줄이면 1440px 시안 크기에서 모바일 크기까지 자연스럽게 줄어듦 */
+
+.card {
+  display: flex;
+  height: clamp(120px, 10vw + 40px, 170px);
+  background: #f3f3f3;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.card:hover {
+  background: #eaeaea;
+}
+
+.photo {
+  flex: 0 0 clamp(110px, 8vw + 60px, 178px);
+  background: #d9d9d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo svg {
+  width: 54%;
+  height: auto;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info {
+  flex: 1;
+  min-width: 0; /* 글자가 길어도 카드 밖으로 넘치지 않도록 */
+  padding: clamp(16px, 1.8vw, 26px) clamp(16px, 2.1vw, 30px);
+}
+
+.name {
+  font-size: clamp(18px, 0.8vw + 12px, 24px);
+  font-weight: 500;
+  margin-bottom: clamp(14px, 1.8vw, 26px);
+}
+
+.name strong {
+  font-weight: 800;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #444;
+}
+
+.meta + .meta {
+  margin-top: clamp(6px, 0.7vw, 10px);
+}
+
+.meta svg {
+  flex-shrink: 0;
+  color: #222;
+  width: 18px;
+  height: 18px;
+}

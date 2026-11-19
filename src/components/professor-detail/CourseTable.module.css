@@ -1,0 +1,110 @@
+/* InfoSection 그리드의 오른쪽 칸에 놓이는 표 */
+.table {
+  /* 여백 값을 변수로 두고 헤더·행에서 같이 사용 → 창 크기가 바뀌어도 열 위치가 맞음 */
+  --body-pad: clamp(14px, 1.67vw + 2px, 26px); /* 표 안쪽 여백 */
+  --row-pad: clamp(14px, 3.33vw - 10px, 38px); /* 행 왼쪽 여백 */
+
+  grid-column: 2;
+  margin-top: 10px;
+  max-width: 566px;
+}
+
+/* 헤더와 행의 열 위치를 맞추기 위해
+   헤더 좌우 여백 = 표 안쪽 여백 + 행 왼쪽 여백 / 표 안쪽 여백 */
+.header,
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  height: 50px;
+  padding: 0 var(--body-pad) 0 calc(var(--body-pad) + var(--row-pad));
+  background: #858585;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.body {
+  background: #d9d9d9;
+  padding: var(--body-pad);
+}
+
+.row {
+  height: 70px;
+  padding-left: var(--row-pad);
+  background: #858585;
+  color: #fff;
+  font-size: 15px;
+}
+
+.row + .row {
+  margin-top: 18px;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+}
+
+.grade {
+  width: 70px;
+  text-align: center;
+}
+
+.type {
+  width: 84px;
+  text-align: center;
+}
+
+.chip {
+  display: inline-block;
+  padding: 8px 10px;
+  background: #b3b3b3;
+  font-size: 14px;
+}
+
+.none {
+  padding: 20px 0;
+  text-align: center;
+  color: #555;
+  font-size: 15px;
+}
+
+/* 오른쪽 칸이 좁아지는 너비에서는 표를 아이콘 아래까지 넓게 사용 (과목명 칸 확보) */
+@media (max-width: 960px) {
+  .table {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  .header {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .row {
+    height: 56px;
+    font-size: 14px;
+  }
+
+  .row + .row {
+    margin-top: 10px;
+  }
+
+  .grade {
+    width: 56px;
+  }
+
+  .type {
+    width: 76px;
+  }
+
+  .chip {
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+}
