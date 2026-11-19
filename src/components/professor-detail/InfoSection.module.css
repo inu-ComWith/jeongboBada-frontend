@@ -1,6 +1,6 @@
 .section {
   display: grid;
-  grid-template-columns: 42px 1fr;
+  grid-template-columns: 42px minmax(0, 1fr); /* 내용이 칸 밖으로 넘치지 않게 */
   column-gap: 20px;
   align-items: center;
 }
@@ -75,7 +75,7 @@
 
 @media (max-width: 720px) {
   .section {
-    grid-template-columns: 36px 1fr;
+    grid-template-columns: 36px minmax(0, 1fr);
     column-gap: 12px;
   }
 

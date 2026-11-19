@@ -1,15 +1,10 @@
-/* 교수님 목록 페이지 푸터 (시안 2252px 이미지 = 1440px 화면 기준으로 환산한 값)
-   크기 값은 clamp(최솟값, 창 너비에 따라 변하는 값, 최댓값)
-   → 창 너비 720px ~ 1440px 사이에서 모바일 크기 ~ 시안 크기로 자연스럽게 바뀜 */
-
 .notice {
   position: relative;
-  /* 교수님 카드 목록과의 간격 80 ~ 150px (margin 대신 padding → 흰 배경 유지) */
+  /* 교수님 카드 목록과의 간격 */
   padding-top: clamp(80px, 9.72vw + 10px, 150px);
   padding-left: 16px;
   padding-right: 16px;
-  /* 문구 아래 ~ 페이지 끝. 시안에서 문구가 물결 윗부분과 살짝 겹침.
-     %는 너비 기준이라 물결(너비의 19.3%)과 함께 늘어남 */
+  /* 물결 높이에 맞춘 아래 여백 */
   padding-bottom: 18%;
   background: #fff;
   font-family: "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -39,18 +34,18 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  aspect-ratio: 2252 / 435; /* 화면 너비에 맞춰 시안 비율 그대로 늘어남 */
+  aspect-ratio: 2252 / 435; /* 시안 비율 */
   height: auto;
   display: block;
 }
 
 @media (max-width: 720px) {
-  /* 물결이 낮아지는 좁은 화면에서는 문구 아래 공간을 조금 더 확보 */
+  /* 좁은 화면에서 아래 여백 확보 */
   .notice {
     padding-bottom: 24%;
   }
 
-  /* 좁은 화면에서는 문구가 자연스럽게 줄바꿈되도록 */
+  /* 좁은 화면에서 자동 줄바꿈 */
   .text br {
     display: none;
   }
