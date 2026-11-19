@@ -1,0 +1,128 @@
+/* 교수님 목록 검색바 (크기 값은 ProfessorList.module.css) */
+
+/* 회색 영역 위로 겹쳐 올리고, 헤더 아래에 닿으면 고정 */
+.searchBar {
+  --bar-pad: 18px; /* 흰색 바 위아래 여백 */
+
+  position: sticky;
+  top: 56px; /* 헤더 높이 */
+  z-index: 10;
+  padding: var(--bar-pad) 0;
+  /* 위로 겹쳐 올리고 아래 여백으로 위치 유지 */
+  margin: calc(-1 * (var(--search-h) + var(--bottom-gap) + var(--bar-pad))) 0
+    calc(var(--bottom-gap) - var(--bar-pad));
+  pointer-events: none; /* 빈 공간 클릭 통과 */
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
+}
+
+/* 고정됐을 때: 흰색 바 */
+.stuck {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  pointer-events: auto;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.search {
+  position: relative;
+  width: 555px;
+  max-width: 100%;
+  pointer-events: auto;
+}
+
+.searchInput {
+  width: 100%;
+  height: var(--search-h);
+  padding: 0 64px 0 26px;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  background: #e8e8e8;
+  font-family: inherit;
+  font-size: 20px;
+  color: #333;
+  transition:
+    border-radius 0.2s,
+    background-color 0.2s;
+}
+
+.searchButton {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #777;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.searchButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* 교수님 수 (고정됐을 때만 표시) */
+.count {
+  display: none;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.count strong {
+  font-weight: 700;
+  color: #111;
+}
+
+/* 고정됐을 때: 둥근 검색창 + 왼쪽 돋보기 */
+.stuck .searchInput {
+  border-radius: 999px;
+  background: #efeff1;
+  padding: 0 24px 0 52px;
+  font-size: 16px;
+}
+
+.stuck .searchInput::placeholder {
+  color: #777;
+}
+
+.stuck .searchButton {
+  right: auto;
+  left: 14px;
+  background: transparent;
+  color: #555;
+}
+
+.stuck .count {
+  display: block;
+}
+
+@media (max-width: 720px) {
+  .searchBar {
+    --bar-pad: 12px;
+  }
+
+  .searchInput {
+    font-size: 16px;
+    padding-left: 18px;
+  }
+
+  .count {
+    font-size: 13px;
+  }
+}

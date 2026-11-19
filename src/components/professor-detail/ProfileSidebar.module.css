@@ -1,14 +1,14 @@
 .profile {
   position: sticky;
-  top: 96px; /* 팀 Header 높이(56px) + 여백 40px */
+  top: 96px; /* 헤더 높이 + 40px */
   align-self: start;
-  /* 사진을 배너 위로 걸치게 (170 ~ 204px 끌어올림) */
+  /* 사진을 배너 위로 걸치게 */
   margin-top: calc(-1 * clamp(170px, 4.72vw + 136px, 204px));
 }
 
 .photo {
   width: clamp(200px, 6.39vw + 154px, 246px);
-  aspect-ratio: 246 / 273; /* 너비에 맞춰 높이도 시안 비율대로 */
+  aspect-ratio: 246 / 273; /* 시안 비율 */
   background: #b8b8b8;
   overflow: hidden;
   display: flex;
@@ -63,9 +63,15 @@
   text-decoration: underline;
 }
 
-@media (max-width: 720px) {
+/* 900px 이하: 고정 해제 */
+@media (max-width: 900px) {
   .profile {
     position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .profile {
     margin-top: -100px;
   }
 

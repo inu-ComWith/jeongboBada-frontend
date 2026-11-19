@@ -1,16 +1,19 @@
-/* InfoSection 그리드의 오른쪽 칸에 놓이는 표 */
+/* 담당과목 표 */
 .table {
-  /* 여백 값을 변수로 두고 헤더·행에서 같이 사용 → 창 크기가 바뀌어도 열 위치가 맞음 */
-  --body-pad: clamp(14px, 1.67vw + 2px, 26px); /* 표 안쪽 여백 */
-  --row-pad: clamp(14px, 3.33vw - 10px, 38px); /* 행 왼쪽 여백 */
+  --body-pad: 26px; /* 표 안쪽 여백 */
+  --row-pad: 38px; /* 행 왼쪽 여백 */
+  --row-h: 70px; /* 행 높이 */
+  --row-gap: 18px; /* 행 사이 간격 */
+  --visible-rows: 5; /* 스크롤 없이 보이는 과목 수 */
 
   grid-column: 2;
   margin-top: 10px;
-  max-width: 566px;
+  /* 고정 너비 (공간이 부족할 때만 줄어듦) */
+  width: 566px;
+  max-width: 100%;
 }
 
-/* 헤더와 행의 열 위치를 맞추기 위해
-   헤더 좌우 여백 = 표 안쪽 여백 + 행 왼쪽 여백 / 표 안쪽 여백 */
+/* 헤더와 행의 열 위치 맞춤 */
 .header,
 .row {
   display: flex;
@@ -26,13 +29,19 @@
   font-weight: 700;
 }
 
+/* 과목이 많으면 표 안에서 스크롤 */
 .body {
   background: #d9d9d9;
   padding: var(--body-pad);
+  max-height: calc(
+    var(--body-pad) * 2 + var(--row-h) * var(--visible-rows) + var(--row-gap) * (var(--visible-rows) - 1)
+  );
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .row {
-  height: 70px;
+  height: var(--row-h);
   padding-left: var(--row-pad);
   background: #858585;
   color: #fff;
@@ -40,7 +49,7 @@
 }
 
 .row + .row {
-  margin-top: 18px;
+  margin-top: var(--row-gap);
 }
 
 .name {
@@ -72,7 +81,7 @@
   font-size: 15px;
 }
 
-/* 오른쪽 칸이 좁아지는 너비에서는 표를 아이콘 아래까지 넓게 사용 (과목명 칸 확보) */
+/* 좁은 화면: 표를 아이콘 아래까지 넓게 */
 @media (max-width: 960px) {
   .table {
     grid-column: 1 / -1;
@@ -81,18 +90,20 @@
 }
 
 @media (max-width: 720px) {
+  .table {
+    --body-pad: 14px;
+    --row-pad: 14px;
+    --row-h: 56px;
+    --row-gap: 10px;
+  }
+
   .header {
     height: 44px;
     font-size: 14px;
   }
 
   .row {
-    height: 56px;
     font-size: 14px;
-  }
-
-  .row + .row {
-    margin-top: 10px;
   }
 
   .grade {
