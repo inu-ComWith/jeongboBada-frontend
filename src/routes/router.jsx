@@ -9,6 +9,7 @@ import ProfessorList from "../pages/professor/ProfessorList";
 import ProfessorDetail from "../pages/professor/ProfessorDetail";
 import AdminRoutes from "../pages/admin/AdminRoutes";
 import ScrollManager from "../components/common/ScrollManager";
+import Course from "../pages/course/Course";
 
 function Layout() {
   return (
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       { path: "/professor/list", element: <ProfessorList /> },
       { path: "/professor/:id", element: <ProfessorDetail /> },
       { path: "/admin/*", element: <AdminRoutes /> },
+      { path: "/course", element: <Course /> },
     ],
   },
 ]);
