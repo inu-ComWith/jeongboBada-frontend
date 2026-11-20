@@ -12,8 +12,6 @@ import AdminRoutes from "../pages/admin/AdminRoutes";
 import ScrollManager from "../components/common/ScrollManager";
 import Course from "../pages/course/Course";
 
-import VerificationUITest from "../pages/auth/VerificationUITest";
-
 function Layout() {
   return (
     <>
@@ -37,7 +35,6 @@ const router = createBrowserRouter([
       { path: "/admin/*", element: <AdminRoutes /> },
       { path: "/course", element: <Course /> },
       { path: "/verification/resubmit", element: <VerificationResubmit /> },
-      { path: "/dev/verification", element: <VerificationUITest /> },
     ],
   },
 ]);

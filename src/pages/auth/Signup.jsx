@@ -18,7 +18,7 @@ import VerificationGuideModal from "../../components/verification/VerificationGu
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-const nicknamePattern = /^[가-힣a-zA-Z0-9]{2,6}$/;
+const nicknamePattern = /^[가-힣a-zA-Z0-9]{2,10}$/;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const passwordRules = (value) => ({
@@ -101,8 +101,14 @@ export default function Signup() {
       [name]: value,
     }));
 
+    // 입력값이 변경되면 해당 필드의 이전 오류 초기화
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+
     if (name === "nickname") {
-      nicknameRequest.current += 1; //이전 닉네임 api 요청 무효화
+      nicknameRequest.current += 1;
       setNicknameStatus(null);
       setNicknameCheckedValue("");
     }
@@ -139,6 +145,14 @@ export default function Signup() {
       setNicknameStatus(available ? "available" : "duplicate");
 
       setNicknameCheckedValue(name);
+
+      if (available) {
+        // 중복 확인 성공 시 기존 닉네임 검증 오류 제거
+        setErrors((prev) => ({
+          ...prev,
+          nickname: "",
+        }));
+      }
     } catch (error) {
       if (requestId !== nicknameRequest.current) return;
 
@@ -200,7 +214,7 @@ export default function Signup() {
     if (!values.nickname.trim()) {
       next.nickname = "닉네임을 입력해주세요";
     } else if (!nicknamePattern.test(values.nickname.trim())) {
-      next.nickname = "닉네임은 한글·영문·숫자 2~6자로 입력해주세요";
+      next.nickname = "닉네임은 한글·영문·숫자 2~10자로 입력해주세요";
     } else if (!nicknameValid) {
       next.nickname = "닉네임 중복 확인을 해주세요";
     }
