@@ -22,7 +22,8 @@
 
 .container {
   width: 100%;
-  max-width: 1140px;
+  /* 화면 너비에 따라 넓어짐 (최대 1583px) */
+  max-width: clamp(1140px, 79.17vw, 1583px);
   margin: 0 auto;
   padding: 0 16px;
 }

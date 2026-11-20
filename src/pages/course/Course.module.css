@@ -1,0 +1,337 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #222;
+}
+
+.page main {
+  flex: 1;
+}
+
+.container {
+  width: min(100% - 48px, 1294px);
+  margin: 0 auto;
+}
+
+.hero {
+  position: relative;
+  min-height: 500px;
+  background: #d9d9d9;
+  overflow: hidden;
+}
+
+.heroDecoration {
+  position: absolute;
+  top: 45px;
+  left: -5%;
+  width: 64%;
+  height: 410px;
+  border-radius: 0 242px 242px 0;
+  background: rgb(246, 248, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: inset 2px 1px 24px rgb(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  padding: 105px 0 70px;
+}
+
+.heroContent h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  font-size: 35px;
+  line-height: 1.22;
+  letter-spacing: -1.3px;
+  font-weight: 750;
+  padding: 40px 0 0;
+}
+
+.heroContent h1 strong {
+  font-size: 48px;
+}
+
+.heroContent > p {
+  margin: 24px 0 42px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.searchForm {
+  display: flex;
+  align-items: stretch;
+  gap: 18px;
+  width: calc(95% - 28.8px);
+}
+
+.searchForm input {
+  flex: 1;
+  min-width: 0;
+  height: 58px;
+  padding: 0 18px;
+  border: 1px solid #eee;
+  background: #fff;
+  outline: none;
+  font-size: 15px;
+}
+
+.searchForm input:focus {
+  border-color: #777;
+}
+
+.searchForm input::placeholder {
+  color: #aaa;
+}
+
+.searchForm button {
+  width: 145px;
+  border: 0;
+  border-radius: 0;
+  background: #333;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.searchForm button:hover {
+  background: #555;
+}
+
+.courseSection {
+  padding: 105px 0 120px;
+  background: #fff;
+}
+
+.sectionHeading h2 {
+  margin: 0 0 16px;
+  font-size: 28px;
+  color: #333;
+  font-weight: 750;
+  letter-spacing: -0.7px;
+}
+
+.sectionHeading p {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.filterPanel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 42px;
+  padding: 43px 22px;
+  background: #f7f7f7;
+}
+
+.selectWrapper {
+  position: relative;
+  min-width: 0;
+}
+
+.selectWrapper::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-30%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 9px solid #c6c6c6;
+  pointer-events: none;
+}
+
+.selectWrapper select {
+  width: 100%;
+  height: 57px;
+  padding: 0 38px 0 17px;
+  appearance: none;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  color: #444;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.selectWrapper select:focus {
+  outline: 1px solid #777;
+}
+
+.serviceCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 45px;
+}
+
+.serviceCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  min-height: 120px;
+  padding: 24px 30px;
+  border: 0;
+  text-align: left;
+  background: #ededed;
+  color: #444;
+}
+
+button.serviceCard {
+  cursor: pointer;
+}
+
+.serviceCard strong {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.serviceCard span {
+  font-size: 15px;
+  color: #333;
+}
+
+.serviceCardActive {
+  background: #d5d5d5;
+}
+
+button.serviceCard:hover {
+  background: #999;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.16);
+}
+
+.disabledCard {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.popularSection {
+  padding: 75px 0 90px;
+  background: #f0f0f0;
+}
+
+.popularHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.moreButton {
+  border: 0;
+  background: transparent;
+  color: #555;
+  font-size: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.moreButton:hover {
+  text-decoration: underline;
+}
+
+.popularGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.popularCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 165px;
+  padding: 28px 20px 20px;
+  background: #fff;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.popularCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.1);
+}
+
+.popularCard h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.popularCard p {
+  margin: 0;
+  color: rgb(51, 51, 51, 0.5);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.courseIcon {
+  align-self: flex-end;
+  color: #111;
+}
+
+.emptyMessage {
+  padding: 45px 0;
+  text-align: center;
+  color: #777;
+}
+
+.banner {
+  min-height: 280px;
+  margin-top: 90px;
+  margin-bottom: 100px;
+  background-color: #263b4d;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bannerOverlay {
+  display: flex;
+  align-items: center;
+  min-height: 280px;
+  padding: 40px 0;
+  background: rgba(0, 0, 0, 0.56);
+}
+
+.bannerContent {
+  max-width: 560px;
+  color: #fff;
+}
+
+.bannerContent > span {
+  font-size: 13px;
+}
+
+.bannerContent h2 {
+  margin: 24px 0 35px;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.bannerContent button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #ddd;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.bannerContent button:hover {
+  color: #fff;
+  text-decoration: underline;
+}

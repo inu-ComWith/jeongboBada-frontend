@@ -1,0 +1,115 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.modal {
+  position: relative;
+  width: min(480px, 100%);
+  padding: 40px 36px 32px;
+  box-sizing: border-box;
+  background: #fff;
+  color: #242424;
+}
+
+.closeButton {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+}
+
+.iconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #f0f0f0;
+}
+
+.modal h2 {
+  margin: 20px 0;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.description {
+  margin: 0 0 20px;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.dateBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f5f5f5;
+  font-size: 14px;
+}
+
+.dateBox strong {
+  font-weight: 400;
+}
+
+.reasonBox {
+  padding: 16px;
+  background: #fcebec;
+  color: #e12626;
+  font-size: 14px;
+}
+
+.reasonBox strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.reasonBox p {
+  margin: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.actions button {
+  flex: 1;
+  min-height: 52px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.contactButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #333;
+  background: #fff;
+  color: #333;
+}
+
+.primaryButton {
+  border: 1px solid #333;
+  background: #333;
+  color: #fff;
+}

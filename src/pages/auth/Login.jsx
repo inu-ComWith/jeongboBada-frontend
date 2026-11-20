@@ -9,6 +9,7 @@ import Footer from "../../components/Footer";
 
 import styles from "./Login.module.css";
 import logoImg from "../../assets/logo.png";
+import VerificationStatusModal from "../../components/verification/VerificationStatusModal";
 
 const MAX_ATTEMPTS = 5; //로그인 실패 허용 횟수
 
@@ -25,7 +26,10 @@ function Login() {
     Boolean(location.state?.passwordResetSuccess),
   );
 
-  const [studentId, setStudentId] = useState("");
+  // 비밀번호 재설정 후 넘어온 경우 학번 미리 채우기
+  const [studentId, setStudentId] = useState(
+    () => location.state?.studentId ?? "",
+  );
   const [password, setPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
@@ -36,13 +40,15 @@ function Login() {
   // 로그인 오류 alert
   const [notice, setNotice] = useState(null);
 
+  const [verificationModal, setVerificationModal] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
 
   // 로그인 제한 종료 시각
   const [lockUntil, setLockUntil] = useState(null);
 
   // 카운트다운
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     if (!showSuccessToast) return;
@@ -151,6 +157,25 @@ function Login() {
       return;
     }
 
+    // 가입 승인 대기
+    if (status === 403 && code === "VERIFICATION_PENDING") {
+      setVerificationModal({
+        type: "pending",
+        requestedAt: data?.data?.requestedAt ?? null,
+      });
+      return;
+    }
+
+    // 가입 반려
+    if (status === 403 && code === "VERIFICATION_REJECTED") {
+      setVerificationModal({
+        type: "rejected",
+        nickname: data?.data?.nickname ?? "",
+        rejectionReason: data?.data?.rejectionReason ?? "",
+      });
+      return;
+    }
+
     if (status === 400 && code === "INVALID_INPUT_VALUE") {
       if (Array.isArray(data?.errors) && data.errors.length > 0) {
         handleValidationErrors(data.errors);
@@ -223,6 +248,7 @@ function Login() {
 
     setNotice(null);
     setErrors({});
+    setVerificationModal(null);
 
     if (!validate()) return;
 
@@ -323,7 +349,7 @@ function Login() {
             className={styles.profileImage}
           />
 
-          {location.state?.passwordResetSuccess && (
+          {showSuccessToast && (
             <div className={styles.successToast} role="status">
               <CheckCircle2 size={17} />
               <span>
@@ -431,7 +457,7 @@ function Login() {
               </button>
 
               {notice?.type === "locked" ? (
-                <Link to="/find-password" className={styles.secondaryButton}>
+                <Link to="/password-reset" className={styles.secondaryButton}>
                   비밀번호 찾기
                 </Link>
               ) : notice?.type === "unregistered" ? (
@@ -453,6 +479,24 @@ function Login() {
       </main>
 
       <Footer />
+
+      {verificationModal && (
+        <VerificationStatusModal
+          type={verificationModal.type}
+          requestedAt={verificationModal.requestedAt}
+          rejectionReason={verificationModal.rejectionReason}
+          onClose={() => setVerificationModal(null)}
+          onResubmit={() => {
+            navigate("/verification/resubmit", {
+              state: {
+                studentId,
+                nickname: verificationModal.nickname,
+                rejectionReason: verificationModal.rejectionReason,
+              },
+            });
+          }}
+        />
+      )}
     </div>
   );
 }

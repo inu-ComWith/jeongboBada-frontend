@@ -9,7 +9,7 @@ import InfoSection from "../../components/professor-detail/InfoSection";
 import CourseTable from "../../components/professor-detail/CourseTable";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-// ProfessorPage(공통) 다음에 ProfessorDetail을 불러와야 .container 덮어쓰기가 적용됨
+// 공통 CSS 다음에 불러와야 .container 덮어쓰기 적용
 import page from "./ProfessorPage.module.css";
 import styles from "./ProfessorDetail.module.css";
 
@@ -46,25 +46,31 @@ export default function ProfessorDetail() {
               <ProfileSidebar professor={professor} />
 
               <div className={styles.content}>
-                <InfoSection icon={<UserIcon />} title="교수 소개" text={professor.intro} />
+                {/* 교수 소개 + 연구실 */}
+                <div>
+                  <InfoSection icon={<UserIcon />} title="교수 소개" text={professor.intro} />
 
-                <InfoSection
-                  icon={<LinkIcon />}
-                  dark
-                  actionLabel="연구실 홈페이지로 이동"
-                  onAction={professor.labUrl ? () => setIsLabModalOpen(true) : undefined}
-                  title={professor.lab}
-                  extra={professor.fields.map((f, i) => (
-                    <span className={styles.tag} key={`${f}-${i}`}>
-                      {f}
-                    </span>
-                  ))}
-                  text={professor.labIntro}
-                />
+                  <InfoSection
+                    icon={<LinkIcon />}
+                    dark
+                    actionLabel="연구실 홈페이지로 이동"
+                    onAction={professor.labUrl ? () => setIsLabModalOpen(true) : undefined}
+                    title={professor.lab}
+                    extra={professor.fields.map((f, i) => (
+                      <span className={styles.tag} key={`${f}-${i}`}>
+                        {f}
+                      </span>
+                    ))}
+                    text={professor.labIntro}
+                  />
+                </div>
 
-                <InfoSection icon={<FileIcon />} title="담당과목">
-                  <CourseTable courses={professor.courses} />
-                </InfoSection>
+                {/* 담당과목 */}
+                <div className={styles.courseCol}>
+                  <InfoSection icon={<FileIcon />} title="담당과목">
+                    <CourseTable courses={professor.courses} />
+                  </InfoSection>
+                </div>
               </div>
             </div>
           )}
