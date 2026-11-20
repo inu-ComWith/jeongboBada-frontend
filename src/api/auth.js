@@ -69,3 +69,18 @@ export const logout = async (refreshToken) => {
 
   return response.data;
 };
+
+export const resubmitVerification = async ({ studentId, password, file }) => {
+  const formData = new FormData();
+
+  formData.append("studentId", studentId.trim());
+  formData.append("password", password);
+  formData.append("file", file);
+
+  const response = await apiClient.post(
+    "/api/auth/verification/resubmit",
+    formData,
+  );
+
+  return response.data;
+};
