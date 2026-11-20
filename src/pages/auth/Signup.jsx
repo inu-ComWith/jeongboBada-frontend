@@ -7,7 +7,6 @@ import {
   Eye,
   EyeOff,
   AlertTriangle,
-  GraduationCap,
   FileText,
 } from "lucide-react";
 
@@ -15,10 +14,11 @@ import { signup, checkNickname } from "../../api/auth";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import styles from "./Signup.module.css";
+//import VerificationGuideModal from "../../components/verification/VerificationGuideModal";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-const nicknamePattern = /^[가-힣a-zA-Z0-9]{2,6}$/;
+const nicknamePattern = /^[가-힣a-zA-Z0-9]{2,10}$/;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const passwordRules = (value) => ({
@@ -101,8 +101,14 @@ export default function Signup() {
       [name]: value,
     }));
 
+    // 입력값이 변경되면 해당 필드의 이전 오류 초기화
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+
     if (name === "nickname") {
-      nicknameRequest.current += 1; //이전 닉네임 api 요청 무효화
+      nicknameRequest.current += 1;
       setNicknameStatus(null);
       setNicknameCheckedValue("");
     }
@@ -139,6 +145,14 @@ export default function Signup() {
       setNicknameStatus(available ? "available" : "duplicate");
 
       setNicknameCheckedValue(name);
+
+      if (available) {
+        // 중복 확인 성공 시 기존 닉네임 검증 오류 제거
+        setErrors((prev) => ({
+          ...prev,
+          nickname: "",
+        }));
+      }
     } catch (error) {
       if (requestId !== nicknameRequest.current) return;
 
@@ -200,7 +214,7 @@ export default function Signup() {
     if (!values.nickname.trim()) {
       next.nickname = "닉네임을 입력해주세요";
     } else if (!nicknamePattern.test(values.nickname.trim())) {
-      next.nickname = "닉네임은 한글·영문·숫자 2~6자로 입력해주세요";
+      next.nickname = "닉네임은 한글·영문·숫자 2~10자로 입력해주세요";
     } else if (!nicknameValid) {
       next.nickname = "닉네임 중복 확인을 해주세요";
     }
@@ -726,63 +740,7 @@ export default function Signup() {
 
       <Footer />
 
-      {showGuide && (
-        <div
-          className={styles.overlay}
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) {
-              closeGuide();
-            }
-          }}
-        >
-          <div
-            className={styles.modal}
-            role="dialog"
-            aria-modal="true"
-            aria-label="신분 확인 서류 안내"
-          >
-            <button
-              type="button"
-              className={styles.modalClose}
-              aria-label="닫기"
-              onClick={closeGuide}
-            >
-              <X size={19} />
-            </button>
-
-            <div className={styles.modalIcon}>
-              <GraduationCap size={25} />
-            </div>
-
-            <h2>신분 확인 서류 중 하나를 첨부해주세요</h2>
-
-            <ul>
-              <li>재학 증명서</li>
-              <li>학생증</li>
-              <li>성적 증명서</li>
-              <li>학비 납입 증명서</li>
-              <li>졸업 예정 증명서</li>
-            </ul>
-
-            <p className={styles.modalNotes}>
-              · pdf, jpg 파일 · 최대 10MB
-              <br />
-              · 이름과 학번이 잘 보이게 찍어주세요
-              <br />
-              · 주민등록번호 등 불필요한 개인정보는 가린 뒤 올려주세요
-              <br />· 제출한 서류는 승인 후 바로 삭제돼요
-            </p>
-
-            <button
-              type="button"
-              className={styles.primaryButton}
-              onClick={closeGuide}
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      )}
+      {/* {showGuide && <VerificationGuideModal onClose={closeGuide} />} */}
 
       {showLeave && (
         <div className={styles.overlay}>
