@@ -1,5 +1,5 @@
 import { GraduationCap, X } from "lucide-react";
-import styles from "../../pages/auth/Signup.module.css";
+import styles from "./VerificationGuideModal.module.css";
 
 export default function VerificationGuideModal({ onClose }) {
   return (
@@ -46,14 +46,6 @@ export default function VerificationGuideModal({ onClose }) {
           · 주민등록번호 등 불필요한 개인정보는 가린 뒤 올려주세요
           <br />· 제출한 서류는 승인 후 바로 삭제돼요
         </p>
-
-        <button
-          type="button"
-          className={styles.primaryButton}
-          onClick={onClose}
-        >
-          확인
-        </button>
       </div>
     </div>
   );
