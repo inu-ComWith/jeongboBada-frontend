@@ -25,15 +25,6 @@ export const login = async ({ studentId, password }) => {
   return response.data;
 };
 
-// 아직 사용하는 곳 없음 나중에 interceptor에서 사용
-export const reissue = async (refreshToken) => {
-  const response = await apiClient.post("/api/auth/reissue", {
-    refreshToken,
-  });
-
-  return response.data;
-};
-
 export const sendPasswordResetCode = async ({ studentId, email }) => {
   const response = await apiClient.post("/api/auth/password-reset/send-code", {
     studentId,
@@ -66,6 +57,20 @@ export const logout = async (refreshToken) => {
   const response = await apiClient.post("/api/auth/logout", {
     refreshToken,
   });
+
+  return response.data;
+};
+
+export const resubmitVerification = async ({ studentId, file }) => {
+  const formData = new FormData();
+
+  formData.append("studentId", studentId.trim());
+  formData.append("file", file);
+
+  const response = await apiClient.post(
+    "/api/auth/verification/resubmit",
+    formData,
+  );
 
   return response.data;
 };

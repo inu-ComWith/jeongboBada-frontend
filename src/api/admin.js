@@ -1,24 +1,8 @@
-import axios from "axios";
+import apiClient from "./axios";
 
-// 관리자 API 전용 클라이언트.
-// 공용 apiClient(src/api/axios.js)는 팀원이 토큰 처리를 넣을 예정이라 건드리지 않고,
-// 여기서 요청마다 accessToken을 Authorization 헤더에 붙인다.
-const adminClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  // 배포 서버(Render)는 잠들어 있으면 첫 요청에 수십 초가 걸린다.
-  timeout: 60000,
-});
-
-adminClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// 공용 apiClient(src/api/axios.js)를 사용해 토큰 첨부·만료 시 재발급을 함께 처리한다.
+// 배포 서버(Render)는 잠들어 있으면 첫 요청에 수십 초가 걸리므로 timeout을 넉넉히 둔다.
+const ADMIN_TIMEOUT = 60000;
 
 // 서버 공통 응답 { success, data, code, message, errors? } 의 에러를 화면에서 쓰기 쉬운 형태로 바꾼다.
 export class AdminApiError extends Error {
@@ -57,7 +41,10 @@ const toAdminError = (error) => {
 
 const request = async (config) => {
   try {
-    const response = await adminClient.request(config);
+    const response = await apiClient.request({
+      timeout: ADMIN_TIMEOUT,
+      ...config,
+    });
     const body = response.data ?? {};
     if (body.success === false) {
       throw new AdminApiError({

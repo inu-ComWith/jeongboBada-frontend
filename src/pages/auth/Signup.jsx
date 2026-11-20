@@ -14,7 +14,7 @@ import { signup, checkNickname } from "../../api/auth";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import styles from "./Signup.module.css";
-//import VerificationGuideModal from "../../components/verification/VerificationGuideModal";
+import VerificationGuideModal from "../../components/verification/VerificationGuideModal";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -740,7 +740,7 @@ export default function Signup() {
 
       <Footer />
 
-      {/* {showGuide && <VerificationGuideModal onClose={closeGuide} />} */}
+      {showGuide && <VerificationGuideModal onClose={closeGuide} />}
 
       {showLeave && (
         <div className={styles.overlay}>

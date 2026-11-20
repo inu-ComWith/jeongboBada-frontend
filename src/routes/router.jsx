@@ -5,6 +5,7 @@ import About from "../pages/dashboard/About";
 import Signup from "../pages/auth/Signup";
 import Login from "../pages/auth/Login";
 import ResetPw from "../pages/auth/ResetPw";
+import VerificationResubmit from "../pages/auth/VerificationResubmit";
 import ProfessorList from "../pages/professor/ProfessorList";
 import ProfessorDetail from "../pages/professor/ProfessorDetail";
 import AdminRoutes from "../pages/admin/AdminRoutes";
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: "/professor/:id", element: <ProfessorDetail /> },
       { path: "/admin/*", element: <AdminRoutes /> },
       { path: "/course", element: <Course /> },
+      { path: "/verification/resubmit", element: <VerificationResubmit /> },
     ],
   },
 ]);
