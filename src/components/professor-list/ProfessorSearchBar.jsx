@@ -4,7 +4,7 @@ import page from "../../pages/professor/ProfessorPage.module.css";
 import styles from "./ProfessorSearchBar.module.css";
 
 // 교수님 목록 검색바: 스크롤 시 헤더 아래에 고정되며 흰색 바로 바뀜
-export default function ProfessorSearchBar({ input, onInputChange, onSubmit, count }) {
+export default function ProfessorSearchBar({ input, onInputChange, onSubmit }) {
   const barRef = useRef(null);
   const [isStuck, setIsStuck] = useState(false);
 
@@ -59,12 +59,6 @@ export default function ProfessorSearchBar({ input, onInputChange, onSubmit, cou
             <SearchIcon />
           </button>
         </form>
-
-        {count != null && (
-          <p className={styles.count}>
-            교수님 <strong>{count}</strong>명
-          </p>
-        )}
       </div>
     </div>
   );
