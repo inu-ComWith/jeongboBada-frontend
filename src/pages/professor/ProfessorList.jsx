@@ -63,7 +63,6 @@ export default function ProfessorList() {
           input={input}
           onInputChange={handleChange}
           onSubmit={handleSubmit}
-          count={status === "done" ? filtered.length : null}
         />
 
         <section className={styles.list}>
